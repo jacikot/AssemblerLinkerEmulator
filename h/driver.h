@@ -2,6 +2,7 @@
 # define Driver_HH
 # include <string>
 # include <map>
+# include <vector>
 # include "parser.h"
 
 // Give Flex the prototype of yylex we want ...
@@ -15,7 +16,7 @@ class Driver
 {
 public:
   Driver ();
-
+  
   std::map<std::string, int> variables;
 
   int result;
@@ -32,5 +33,10 @@ public:
   bool trace_scanning;
   // The token's location used by the scanner.
   yy::location location;
+
+  //adding label to symbol table
+  void addLabel(std::string);
+
+  
 };
 #endif // ! Driver_HH
