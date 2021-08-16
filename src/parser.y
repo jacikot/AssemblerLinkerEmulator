@@ -36,19 +36,25 @@
   SLASH   "/"
   LPAREN  "("
   RPAREN  ")"
+  LBRACK  "["
+  RBRACK  "]"
   COMMA   ","
   COLON   ":"
   DOLLAR  "$"
-  PERCENT "%" 
   HASH    "#"
+  PERCENT "%" 
   NEWLINE "\n"
-  GLOBAL  ".global"
-  EXTERN  ".extern"
-  SECTION ".section"
-  WORD    ".word"
-  SKIP    ".skip"
-  EQU     ".equ"
-  END     ".end"
+  GLOBAL  
+  EXTERN  
+  SECTION 
+  WORD    
+  SKIP    
+  EQU     
+//   END    0
+  REG
+  REG_PC  "pc"
+  REG_SP  "sp"
+  REG_PSW "psw"
 ;
 
 
@@ -58,12 +64,17 @@
 %token <tokens::Expression> expression
 %token <tokens::Directive> directive
 %token <tokens::Instruction> instruction
-%token <std::vector<std::string>> symbols
-%token <std::string> SYMBOL "symbol"
+%token <std::vector<tokens::Initializer>> symbols
+%token <std::string> SYMBOL
 %token <int> literal
-%token <int> NUMBER "number"
-%token <int> HEX "hex"
-%token <std::string> COMMENT "comment"
+%token <int> NUMBER
+%token <int> HEX
+%token <std::string> MNM0
+%token <std::string> MNM1OP
+%token <std::string> MNM1REG
+%token <std::string> MNM2REGOP
+%token <std::string> MNM2REGREG
+%token <std::string> COMMENT
 %token <tokens::Initializer> initializer
 %token <std::vector<tokens::Initializer>> initializers
 %token <tokens::Instr0> instr0
@@ -71,6 +82,8 @@
 %token <tokens::Instr1_op> Instr1_op
 %token <tokens::Instr2_regreg> instr2_regreg
 %token <tokens::Instr2_regop> instr2_regop
+%token <int> operand
+%token <int> operand_jmp
 
 
 %printer { yyo << $$; } <*>;
@@ -83,29 +96,29 @@ code:
 ;
 
 lines:   
-    %empty {
-        $$=new vector<tokens::Line>();
-    }
+    %empty {}
 |   lines line {
-        $1->push_back($2);
-        $$=$1;
+        drv.assemler.addLine($2);
     }
 ;
 
 //!!!! labela na kraju svega?
 line:
-    label line {}
-|   COMMENT "\n" line {}
+    label line {
+        $$=$2;
+    }
+|   COMMENT "\n" line {
+        $$=$3;
+    }
 |   exspression {
-        $$=new Line();
+        $$=Line();
         $$.exp=$1;
-
     }
 ;
 
 label:
     SYMBOL ":" {
-        //dodaj labelu u tabelu simbola
+        drv.assembler.addSymbol($1);
     }
 ;
 
@@ -120,40 +133,102 @@ expression:
 
 directive:
     GLOBAL symbols {
-        //simbole zameni u tabeli simbola sa globalnim ako postoje ili ih dodaj
+        $$=tokens::Directive();
+        $$.symbols=$2;
+        $$.tupe=DirType::GLOBAL;
     }
 |   EXTERN symbols {
-        //isto oznaci kao globalne i nedefinisane
+        $$=tokens::Directive();
+        $$.symbols=$2;
+        $$.tupe=DirType::EXTERN;
     }
 |   SECTION SYMBOL {
-        //dodaj u tabelu sekcija, resetuj brojac adresa
+        $$=tokens::Directive();
+        Initializer ini;
+        ini.symbol=true;
+        ini.name=$2;
+        $$.symbols.push_back(ini);
+        $$.tupe=DirType::SECTION;
+        drv.assembler.addSection($2)
+        drv.assembler.symbolTable.addSection($2);
     }
 |   WORD initializers {
-        //inicijalizuj prostor vrednostima iz liste inicijalizatora
+        $$=tokens::Directive();
+        $$.symbols=$2;
+        $$.tupe=DirType::WORD;
+        drv.assembler.addToCounter($$.symbols.size()*2);
     }
 |   SKIP literal {
-        //counter povecaj za vrednost literala
+        $$=tokens::Directive();
+        Initializer ini;
+        ini.symbol=false;
+        ini.value=$2;
+        $$.symbols.push_back(ini);
+        $$.tupe=DirType::SKIP;
+        drv.assembler.addToCounter($2);
     } 
 |   EQU SYMBOL "," literal {
-        //u tabelu simbola dodaj novi simbol sa vrednoscu literala
+        $$=tokens::Directive();
+        Initializer ini;
+        ini.symbol=false;
+        ini.value=$4;
+        $$.symbols.push_back(ini);
+        $$.tupe=DirType::EQU;
+        $$.toInitialize=$2;
+        drv.assembler.addAbsoluteSymbol($2,$4);
     }
 |   END {
         //postavi flag u driveru i ako je on postavljen na dalje ne obradjuj tekst
+        
     }
+;
+
+symbols:
+    SYMBOL {
+        Initializer ini;
+        ini.symbol=true;
+        ini.name=$1;
+        $$=std::vector<tokens::Initializer>>();
+        $$.push_back(ini);
+    }
+|   symbols "," SYMBOL{
+        $$=$1;
+        Initializer ini;
+        ini.symbol=true;
+        ini.name=$3;
+        $$.push_back(ini);
+    }
+
 ;
 
 initializers:
     initializers "," SYMBOL {
-        //vrednost inicijalizatora postavi na vrednost iz tabele simbola
+        Initializer ini;
+        ini.symbol=true;
+        ini.name=$3;
+        $$=$1;
+        $$.push_back(ini);
     }
 |   initializers "," literal {
-        //vrednost literala
+        Initializer ini;
+        ini.symbol=false;
+        ini.value=$3;
+        $$=$1;
+        $$.push_back(ini);
     }
 |   literal {
-
+        Initializer ini;
+        ini.symbol=false;
+        ini.value=$1;
+        $$=std::vector<tokens::Initializer>>();
+        $$.push_back(ini);
     }
-|   initializer {
-
+|   SYMBOL {
+        Initializer ini;
+        ini.symbol=true;
+        ini.name=$1;
+        $$=std::vector<tokens::Initializer>>();
+        $$.push_back(ini);
     }
 ;
 
@@ -161,8 +236,87 @@ literal:
     NUMBER {
         $$=$1;
     }
+|   "-" NUMBER {
+        $$=-$2;
+    }
+|   HEX {
+        $$=$1;
+    }
+|   "-" HEX {
+        $$=-$2;
+    }
+;
+instruction:
+    MNM0
+|   MNM1OP operand_jmp
+|   MNM1REG REG
+|   MNM2REGOP REG "," operand
+|   MNM2REGREG REG "," REG
+;
 
+operand_jmp:
+    literal {
+        $$=$1;
+    }
+|   SYMBOL {
+        //uzmi za vrednost simbola iz tabele simbola, apsolutno adresiranje
 
+    }
+|   "%" SYMBOL{
+        //pc relativno adresiranje
+    }
+|   "*" literal {
+        //sa adrese u memoriji koja ima vr literala
+    }
+|   "*" SYMBOL {
+        //sa adrese u memoriji koja ima vrednost simbola
+    }
+|   "*" REG {
+        //vrednost iz registra
+    }
+|   "*" "[" REG "]" {
+        //vrednost iz memorije adresa iz registra
+    }
+|   "*" "[" REG "+" literal "]" {
+        //vrednost iz memorije adresa iz registra +literal
+    }
+|   "*" "[" REG "+" SYMBOL "]" {
+        //vrednost iz memorije adresa iz registra + symbol
+    }
+
+;
+
+operand:
+    "$" literal {
+        $$=$2;
+    }
+|   "$" SYMBOL {
+        //uzmi za vrednost simbola iz tabele simbola, apsolutno adresiranje
+
+    }
+|   "%" SYMBOL{
+        //pc relativno adresiranje
+    }
+|   literal {
+        //sa adrese u memoriji koja ima vr literala
+    }
+|   SYMBOL {
+        //sa adrese u memoriji koja ima vrednost simbola
+    }
+|   REG {
+        //vrednost iz registra
+    }
+|   "[" REG "]" {
+        //vrednost iz memorije adresa iz registra
+    }
+|   "[" REG "+" literal "]" {
+        //vrednost iz memorije adresa iz registra +literal
+    }
+|   "[" REG "+" SYMBOL "]" {
+        //vrednost iz memorije adresa iz registra + symbol
+    }
+
+;
 
 %start unit;
 unit: assignments exp  { drv.result = $2; };

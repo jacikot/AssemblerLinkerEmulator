@@ -54,6 +54,9 @@ mnm2_regop (ldr|str)
 "$"        return yy::parser::make_DOLLAR (loc);
 "%"        return yy::parser::make_PERCENT(loc);
 "#"        return yy::parser::make_HASH   (loc);
+"["        return yy::parser::make_LBRACK (loc);
+"}"        return yy::parser::make_RBRACK (loc);
+
 "\n"       return yy::parser::make_NEWLINE(loc);
 
 ".global"  return yy::parser::make_GLOBAL (loc);
@@ -62,18 +65,18 @@ mnm2_regop (ldr|str)
 ".word"    return yy::parser::make_WORD   (loc);
 ".skip"    return yy::parser::make_SKIP   (loc);
 ".equ"     return yy::parser::make_EQU    (loc);
-".end"     return yy::parser::make_END    (loc);
+".end"     return yy::parser::make_YYEOF  (loc);
 
 {register} return yy::parser::make_REG    (lyytext,oc);
 "pc"       return yy::parser::make_REG_PC (loc);
 "sp"       return yy::parser::make_REG_SP (loc);
 "psw"      return yy::parser::make_REG_PSW(loc);
 
-{mnm0}       return yy::parser::make_MNM0(yytext,loc);
-{mnm1_op}    return yy::parser::make_MNM1OP(yytext,loc);
-{mnm1_reg}   return yy::parser::make_MNM1REG(yytext,loc);
-{mnm2_regop} return yy::parser::make_MNM2REGOP(yytext,loc);
-{mnm2_regreg}return yy::parser::make_MNM2REGREG(yytext,loc);
+{mnm0}        return yy::parser::make_MNM0(yytext,loc);
+{mnm1_op}     return yy::parser::make_MNM1OP(yytext,loc);
+{mnm1_reg}    return yy::parser::make_MNM1REG(yytext,loc);
+{mnm2_regop}  return yy::parser::make_MNM2REGOP(yytext,loc);
+{mnm2_regreg} return yy::parser::make_MNM2REGREG(yytext,loc);
 
 {int}      return make_NUMBER (yytext, loc);
 {hex_int}  return make_HEX (yytext, loc);

@@ -1,15 +1,28 @@
 #include <string>
+#include <vector>
 namespace tokens{
     class Line{
         public:
             Expression exp;
     };
 
-    class Expression{
+    enum DirType{
+        GLOBAL, EXTERN, SECTION, SKIP, WORD, EQU
     };
-    class Directive : public Expression{
 
+
+    class Expression{
+        
     };
+
+    class Directive : public Expression{
+        public:
+            DirType type;
+            std::vector<Initializer> symbols;
+            std::string toInitialize;
+    };
+
+
     class Instruction : public Expression{
         public:
          std::string mnemonic;
@@ -36,7 +49,10 @@ namespace tokens{
     };
 
     class Initializer{
-
+        public:
+            bool symbol;
+            std::string name;
+            int value;
     };
 
 }
