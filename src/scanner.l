@@ -56,9 +56,6 @@ mnm2_regop (ldr|str)
 "#"        return yy::parser::make_HASH   (loc);
 "["        return yy::parser::make_LBRACK (loc);
 "}"        return yy::parser::make_RBRACK (loc);
-
-"\n"       return yy::parser::make_NEWLINE(loc);
-
 ".global"  return yy::parser::make_GLOBAL (loc);
 ".extern"  return yy::parser::make_EXTERN (loc);
 ".section" return yy::parser::make_SECTION(loc);

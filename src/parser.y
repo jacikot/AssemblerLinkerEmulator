@@ -43,30 +43,19 @@
   DOLLAR  "$"
   HASH    "#"
   PERCENT "%" 
-  NEWLINE "\n"
   GLOBAL  
   EXTERN  
   SECTION 
   WORD    
   SKIP    
   EQU     
-//   END    0
-  REG
   REG_PC  "pc"
   REG_SP  "sp"
   REG_PSW "psw"
 ;
 
-
-%token <std::vector<tokens::Line>> lines
-%token <tokens::Line> line
-%token <std::string> label
-%token <tokens::Expression*> expression
-%token <tokens::Directive*> directive
-%token <tokens::Instruction*> instruction
-%token <std::vector<tokens::Initializer>> symbols
+%token <std::string> REG
 %token <std::string> SYMBOL
-%token <int> literal
 %token <int> NUMBER
 %token <int> HEX
 %token <std::string> MNM0
@@ -75,15 +64,18 @@
 %token <std::string> MNM2REGOP
 %token <std::string> MNM2REGREG
 %token <std::string> COMMENT
-%token <tokens::Initializer> initializer
-%token <std::vector<tokens::Initializer>> initializers
-%token <tokens::Instr0*> instr0
-%token <tokens::Instr1_reg*> instr1_reg
-%token <tokens::Instr1_op*> Instr1_op
-%token <tokens::Instr2_regreg*> instr2_regreg
-%token <tokens::Instr2_regop*> instr2_regop
-%token <tokens::Operand> operand
-%token <tokens::Operand> operand_jmp
+
+%type <std::vector<tokens::Line>> lines
+%type <tokens::Line> line
+%type <std::string> label
+%type <int> literal
+%type <tokens::Expression*> expression
+%type <tokens::Directive*> directive
+%type <tokens::Instruction*> instruction
+%type <std::vector<tokens::Initializer>> symbols
+%type <std::vector<tokens::Initializer>> initializers
+%type <tokens::Operand> operand
+%type <tokens::Operand> operand_jmp
 
 
 %printer { yyo << $$; } <*>;
@@ -108,10 +100,10 @@ line:
 |   label line {
         $$=$2;
     }
-|   COMMENT "\n" line {
-        $$=$3;
+|   COMMENT line {
+        $$=$2;
     }
-|   exspression {
+|   expression {
         $$=Line();
         $$.exp=$1;
     }
@@ -420,26 +412,6 @@ operand:
 
 ;
 
-%start unit;
-unit: assignments exp  { drv.result = $2; };
-
-assignments:
-  %empty                 {}
-| assignments assignment {};
-
-assignment:
-  "identifier" ":=" exp { drv.variables[$1] = $3; };
-
-%left "+" "-";
-%left "*" "/";
-exp:
-  "number"
-| "identifier"  { $$ = drv.variables[$1]; }
-| exp "+" exp   { $$ = $1 + $3; }
-| exp "-" exp   { $$ = $1 - $3; }
-| exp "*" exp   { $$ = $1 * $3; }
-| exp "/" exp   { $$ = $1 / $3; }
-| "(" exp ")"   { $$ = $2; }
 %%
 
 void
