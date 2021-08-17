@@ -1,5 +1,5 @@
 #include "../h/assembler.h"
-
+#include "../h/tokens.h"
 
 void Assembler::addLine(tokens::Line line){
     lines.push_back(line);
@@ -22,4 +22,11 @@ void Assembler::addAbsoluteSymbol(std::string name, int value){
 
 void Assembler::addUndefinedSymbol(std::string name){
     symbolTable.addUndefinedSymbol(name);
+}
+
+int Assembler::secondPass(){
+    for(tokens::Line l:lines){
+        int i=l.exp->secondPass(this);
+        if(i!=0)return i;
+    }
 }

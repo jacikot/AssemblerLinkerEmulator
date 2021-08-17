@@ -18,6 +18,7 @@ class Assembler{
         void addAbsoluteSymbol(std::string name, int value);
         void addUndefinedSymbol(std::string name);
 
+        int secondPass();
     private:
         std::vector<tokens::Line>lines;
         SymbolTable symbolTable;

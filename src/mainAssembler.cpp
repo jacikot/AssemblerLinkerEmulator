@@ -14,6 +14,8 @@ int main (int argc, char *argv[])
       std::cout << drv.result << '\n';
     else
       res = 1;
+  
+  int ret=drv.assembler.secondPass();
   return res;
 }
 
