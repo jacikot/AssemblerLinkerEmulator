@@ -4,16 +4,16 @@
 # include <cstdlib>
 # include <cstring> // strerror
 # include <string>
-# include "driver.h"
-# include "parser.h"
+# include "../h/driver.h"
+# include "../build/parser.h"
 %}
 
 %option noyywrap nounput noinput batch debug
 
 %{
   // A number symbol corresponding to the value in S.
-  yy::parser::symbol_type
-  make_NUMBER (const std::string &s, const yy::parser::location_type& loc);
+  yy::parser::symbol_type make_NUMBER (const std::string &s, const yy::parser::location_type& loc);
+  yy::parser::symbol_type make_HEX (const std::string &s, const yy::parser::location_type& loc);
 %}
 
 id    [a-zA-Z][a-zA-Z_0-9]*
@@ -64,7 +64,7 @@ mnm2_regop (ldr|str)
 ".equ"     return yy::parser::make_EQU    (loc);
 ".end"     return yy::parser::make_YYEOF  (loc);
 
-{register} return yy::parser::make_REG    (lyytext,oc);
+{register} return yy::parser::make_REG    (yytext,loc);
 "pc"       return yy::parser::make_REG_PC (loc);
 "sp"       return yy::parser::make_REG_SP (loc);
 "psw"      return yy::parser::make_REG_PSW(loc);
@@ -77,7 +77,7 @@ mnm2_regop (ldr|str)
 
 {int}      return make_NUMBER (yytext, loc);
 {hex_int}  return make_HEX (yytext, loc);
-{comment}  return make_COMMENT (yytext, loc);
+{comment}  return yy::parser::make_COMMENT (yytext, loc);
 
 {id}       return yy::parser::make_SYMBOL (yytext, loc);
 .          {
@@ -105,7 +105,7 @@ yy::parser::symbol_type make_HEX (const std::string &s, const yy::parser::locati
 }
 
 
-void driver::scan_begin ()
+void Driver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
   if (file.empty () || file == "-")
@@ -117,7 +117,7 @@ void driver::scan_begin ()
     }
 }
 
-void driver::scan_end ()
+void Driver::scan_end ()
 {
   fclose (yyin);
 }

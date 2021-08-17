@@ -1,3 +1,6 @@
+#ifndef SYMBOLTABLE
+#define SYMBOLTABLE
+
 #include <string>
 #include <map>
 
@@ -47,3 +50,5 @@ class SymbolTable{
 
 
 };
+
+#endif

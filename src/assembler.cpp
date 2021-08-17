@@ -1,4 +1,4 @@
-#include "assembler.h"
+#include "../h/assembler.h"
 
 
 void Assembler::addLine(tokens::Line line){

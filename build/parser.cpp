@@ -41,12 +41,11 @@
 
 
 // Unqualified %code blocks.
-#line 24 "../src/parser.y"
+#line 19 "../src/parser.y"
 
-# include "driver.h"
-#include "tokens.h"
+# include "../h/driver.h"
 
-#line 50 "parser.cpp"
+#line 49 "parser.cpp"
 
 
 #ifndef YY_
@@ -137,7 +136,7 @@
 #define YYRECOVERING()  (!!yyerrstatus_)
 
 namespace yy {
-#line 141 "parser.cpp"
+#line 140 "parser.cpp"
 
 
   /* Return YYSTR after stripping away unnecessary quotes and
@@ -182,7 +181,7 @@ namespace yy {
 
 
   /// Build a parser object.
-  parser::parser (driver& drv_yyarg)
+  parser::parser (Driver& drv_yyarg)
 #if YYDEBUG
     : yydebug_ (false),
       yycdebug_ (&std::cerr),
@@ -261,6 +260,7 @@ namespace yy {
       case 32: // MNM2REGOP
       case 33: // MNM2REGREG
       case 34: // COMMENT
+      case 37: // lines
       case 39: // label
         value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (that.value));
         break;
@@ -268,10 +268,6 @@ namespace yy {
       case 42: // symbols
       case 43: // initializers
         value.YY_MOVE_OR_COPY< std::vector<tokens::Initializer> > (YY_MOVE (that.value));
-        break;
-
-      case 37: // lines
-        value.YY_MOVE_OR_COPY< std::vector<tokens::Line> > (YY_MOVE (that.value));
         break;
 
       case 41: // directive
@@ -324,6 +320,7 @@ namespace yy {
       case 32: // MNM2REGOP
       case 33: // MNM2REGREG
       case 34: // COMMENT
+      case 37: // lines
       case 39: // label
         value.move< std::string > (YY_MOVE (that.value));
         break;
@@ -331,10 +328,6 @@ namespace yy {
       case 42: // symbols
       case 43: // initializers
         value.move< std::vector<tokens::Initializer> > (YY_MOVE (that.value));
-        break;
-
-      case 37: // lines
-        value.move< std::vector<tokens::Line> > (YY_MOVE (that.value));
         break;
 
       case 41: // directive
@@ -387,6 +380,7 @@ namespace yy {
       case 32: // MNM2REGOP
       case 33: // MNM2REGREG
       case 34: // COMMENT
+      case 37: // lines
       case 39: // label
         value.copy< std::string > (that.value);
         break;
@@ -394,10 +388,6 @@ namespace yy {
       case 42: // symbols
       case 43: // initializers
         value.copy< std::vector<tokens::Initializer> > (that.value);
-        break;
-
-      case 37: // lines
-        value.copy< std::vector<tokens::Line> > (that.value);
         break;
 
       case 41: // directive
@@ -449,6 +439,7 @@ namespace yy {
       case 32: // MNM2REGOP
       case 33: // MNM2REGREG
       case 34: // COMMENT
+      case 37: // lines
       case 39: // label
         value.move< std::string > (that.value);
         break;
@@ -456,10 +447,6 @@ namespace yy {
       case 42: // symbols
       case 43: // initializers
         value.move< std::vector<tokens::Initializer> > (that.value);
-        break;
-
-      case 37: // lines
-        value.move< std::vector<tokens::Line> > (that.value);
         break;
 
       case 41: // directive
@@ -520,137 +507,7 @@ namespace yy {
     yyo << (yytype < yyntokens_ ? "token" : "nterm")
         << ' ' << yytname_[yytype] << " ("
         << yysym.location << ": ";
-    switch (yytype)
-    {
-      case 25: // REG
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::string > (); }
-#line 529 "parser.cpp"
-        break;
-
-      case 26: // SYMBOL
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::string > (); }
-#line 535 "parser.cpp"
-        break;
-
-      case 27: // NUMBER
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < int > (); }
-#line 541 "parser.cpp"
-        break;
-
-      case 28: // HEX
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < int > (); }
-#line 547 "parser.cpp"
-        break;
-
-      case 29: // MNM0
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::string > (); }
-#line 553 "parser.cpp"
-        break;
-
-      case 30: // MNM1OP
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::string > (); }
-#line 559 "parser.cpp"
-        break;
-
-      case 31: // MNM1REG
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::string > (); }
-#line 565 "parser.cpp"
-        break;
-
-      case 32: // MNM2REGOP
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::string > (); }
-#line 571 "parser.cpp"
-        break;
-
-      case 33: // MNM2REGREG
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::string > (); }
-#line 577 "parser.cpp"
-        break;
-
-      case 34: // COMMENT
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::string > (); }
-#line 583 "parser.cpp"
-        break;
-
-      case 37: // lines
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::vector<tokens::Line> > (); }
-#line 589 "parser.cpp"
-        break;
-
-      case 38: // line
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < tokens::Line > (); }
-#line 595 "parser.cpp"
-        break;
-
-      case 39: // label
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::string > (); }
-#line 601 "parser.cpp"
-        break;
-
-      case 40: // expression
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < tokens::Expression* > (); }
-#line 607 "parser.cpp"
-        break;
-
-      case 41: // directive
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < tokens::Directive* > (); }
-#line 613 "parser.cpp"
-        break;
-
-      case 42: // symbols
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::vector<tokens::Initializer> > (); }
-#line 619 "parser.cpp"
-        break;
-
-      case 43: // initializers
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < std::vector<tokens::Initializer> > (); }
-#line 625 "parser.cpp"
-        break;
-
-      case 44: // literal
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < int > (); }
-#line 631 "parser.cpp"
-        break;
-
-      case 45: // instruction
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < tokens::Instruction* > (); }
-#line 637 "parser.cpp"
-        break;
-
-      case 46: // operand_jmp
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < tokens::Operand > (); }
-#line 643 "parser.cpp"
-        break;
-
-      case 47: // operand
-#line 81 "../src/parser.y"
-                 { yyo << yysym.value.template as < tokens::Operand > (); }
-#line 649 "parser.cpp"
-        break;
-
-      default:
-        break;
-    }
+    YYUSE (yytype);
     yyo << ')';
   }
 #endif
@@ -877,6 +734,7 @@ namespace yy {
       case 32: // MNM2REGOP
       case 33: // MNM2REGREG
       case 34: // COMMENT
+      case 37: // lines
       case 39: // label
         yylhs.value.emplace< std::string > ();
         break;
@@ -884,10 +742,6 @@ namespace yy {
       case 42: // symbols
       case 43: // initializers
         yylhs.value.emplace< std::vector<tokens::Initializer> > ();
-        break;
-
-      case 37: // lines
-        yylhs.value.emplace< std::vector<tokens::Line> > ();
         break;
 
       case 41: // directive
@@ -934,27 +788,27 @@ namespace yy {
   case 2:
 #line 87 "../src/parser.y"
           {}
-#line 938 "parser.cpp"
+#line 792 "parser.cpp"
     break;
 
   case 3:
 #line 91 "../src/parser.y"
            {}
-#line 944 "parser.cpp"
+#line 798 "parser.cpp"
     break;
 
   case 4:
 #line 92 "../src/parser.y"
                {
-        drv.assemler.addLine(yystack_[0].value.as < tokens::Line > ());
+        drv.assembler.addLine(yystack_[0].value.as < tokens::Line > ());
     }
-#line 952 "parser.cpp"
+#line 806 "parser.cpp"
     break;
 
   case 5:
 #line 99 "../src/parser.y"
            {}
-#line 958 "parser.cpp"
+#line 812 "parser.cpp"
     break;
 
   case 6:
@@ -962,7 +816,7 @@ namespace yy {
                {
         yylhs.value.as < tokens::Line > ()=yystack_[0].value.as < tokens::Line > ();
     }
-#line 966 "parser.cpp"
+#line 820 "parser.cpp"
     break;
 
   case 7:
@@ -970,16 +824,16 @@ namespace yy {
                  {
         yylhs.value.as < tokens::Line > ()=yystack_[0].value.as < tokens::Line > ();
     }
-#line 974 "parser.cpp"
+#line 828 "parser.cpp"
     break;
 
   case 8:
 #line 106 "../src/parser.y"
                {
-        yylhs.value.as < tokens::Line > ()=Line();
+        yylhs.value.as < tokens::Line > ()=tokens::Line();
         yylhs.value.as < tokens::Line > ().exp=yystack_[0].value.as < tokens::Expression* > ();
     }
-#line 983 "parser.cpp"
+#line 837 "parser.cpp"
     break;
 
   case 9:
@@ -987,7 +841,7 @@ namespace yy {
                {
         drv.assembler.addSymbol(yystack_[1].value.as < std::string > ());
     }
-#line 991 "parser.cpp"
+#line 845 "parser.cpp"
     break;
 
   case 10:
@@ -995,7 +849,7 @@ namespace yy {
               {
         yylhs.value.as < tokens::Expression* > ()=yystack_[0].value.as < tokens::Directive* > ();
     }
-#line 999 "parser.cpp"
+#line 853 "parser.cpp"
     break;
 
   case 11:
@@ -1003,7 +857,7 @@ namespace yy {
                 {
         yylhs.value.as < tokens::Expression* > ()=yystack_[0].value.as < tokens::Instruction* > ();
     }
-#line 1007 "parser.cpp"
+#line 861 "parser.cpp"
     break;
 
   case 12:
@@ -1011,9 +865,9 @@ namespace yy {
                    {
         yylhs.value.as < tokens::Directive* > ()=new tokens::Directive();
         yylhs.value.as < tokens::Directive* > ()->symbols=yystack_[0].value.as < std::vector<tokens::Initializer> > ();
-        yylhs.value.as < tokens::Directive* > ()->tupe=tokens::DirType::GLOBAL;
+        yylhs.value.as < tokens::Directive* > ()->type=tokens::DirType::GLOBAL;
     }
-#line 1017 "parser.cpp"
+#line 871 "parser.cpp"
     break;
 
   case 13:
@@ -1021,12 +875,12 @@ namespace yy {
                    {
         yylhs.value.as < tokens::Directive* > ()=new tokens::Directive();
         yylhs.value.as < tokens::Directive* > ()->symbols=yystack_[0].value.as < std::vector<tokens::Initializer> > ();
-        yylhs.value.as < tokens::Directive* > ()->tupe=tokens::DirType::EXTERN;
+        yylhs.value.as < tokens::Directive* > ()->type=tokens::DirType::EXTERN;
         for (tokens::Initializer i:yystack_[0].value.as < std::vector<tokens::Initializer> > ()){
-            drv.assembler.addUndefinedSyumbol(i.name);
+            drv.assembler.addUndefinedSymbol(i.name);
         }
     }
-#line 1030 "parser.cpp"
+#line 884 "parser.cpp"
     break;
 
   case 14:
@@ -1037,67 +891,66 @@ namespace yy {
         ini.symbol=true;
         ini.name=yystack_[0].value.as < std::string > ();
         yylhs.value.as < tokens::Directive* > ()->symbols.push_back(ini);
-        yylhs.value.as < tokens::Directive* > ()->tupe=tokens::DirType::SECTION;
-        drv.assembler.addSection(yystack_[0].value.as < std::string > ())
-        drv.assembler.symbolTable.addSection(yystack_[0].value.as < std::string > ());
+        yylhs.value.as < tokens::Directive* > ()->type=tokens::DirType::SECTION;
+        drv.assembler.addSection(yystack_[0].value.as < std::string > ());
     }
-#line 1045 "parser.cpp"
+#line 898 "parser.cpp"
     break;
 
   case 15:
-#line 151 "../src/parser.y"
+#line 150 "../src/parser.y"
                       {
         yylhs.value.as < tokens::Directive* > ()=new tokens::Directive();
         yylhs.value.as < tokens::Directive* > ()->symbols=yystack_[0].value.as < std::vector<tokens::Initializer> > ();
-        yylhs.value.as < tokens::Directive* > ()->tupe=tokens::DirType::WORD;
-        drv.assembler.addToCounter(yylhs.value.as < tokens::Directive* > ().symbols.size()*2);
+        yylhs.value.as < tokens::Directive* > ()->type=tokens::DirType::WORD;
+        drv.assembler.addToCounter(yylhs.value.as < tokens::Directive* > ()->symbols.size()*2);
     }
-#line 1056 "parser.cpp"
+#line 909 "parser.cpp"
     break;
 
   case 16:
-#line 157 "../src/parser.y"
+#line 156 "../src/parser.y"
                  {
         yylhs.value.as < tokens::Directive* > ()=new tokens::Directive();
         tokens::Initializer ini;
         ini.symbol=false;
         ini.value=yystack_[0].value.as < int > ();
         yylhs.value.as < tokens::Directive* > ()->symbols.push_back(ini);
-        yylhs.value.as < tokens::Directive* > ()->tupe=tokens::DirType::SKIP;
+        yylhs.value.as < tokens::Directive* > ()->type=tokens::DirType::SKIP;
         drv.assembler.addToCounter(yystack_[0].value.as < int > ());
     }
-#line 1070 "parser.cpp"
+#line 923 "parser.cpp"
     break;
 
   case 17:
-#line 166 "../src/parser.y"
+#line 165 "../src/parser.y"
                            {
         yylhs.value.as < tokens::Directive* > ()=new tokens::Directive();
         tokens::Initializer ini;
         ini.symbol=false;
         ini.value=yystack_[0].value.as < int > ();
         yylhs.value.as < tokens::Directive* > ()->symbols.push_back(ini);
-        yylhs.value.as < tokens::Directive* > ()->tupe=tokens::DirType::EQU;
+        yylhs.value.as < tokens::Directive* > ()->type=tokens::DirType::EQU;
         yylhs.value.as < tokens::Directive* > ()->toInitialize=yystack_[2].value.as < std::string > ();
         drv.assembler.addAbsoluteSymbol(yystack_[2].value.as < std::string > (),yystack_[0].value.as < int > ());
     }
-#line 1085 "parser.cpp"
+#line 938 "parser.cpp"
     break;
 
   case 18:
-#line 179 "../src/parser.y"
+#line 178 "../src/parser.y"
            {
         tokens::Initializer ini;        
         ini.symbol=true;
         ini.name=yystack_[0].value.as < std::string > ();
-        yylhs.value.as < std::vector<tokens::Initializer> > ()=std::vector<tokens::Initializer>>();
+        yylhs.value.as < std::vector<tokens::Initializer> > ()=std::vector<tokens::Initializer>();
         yylhs.value.as < std::vector<tokens::Initializer> > ().push_back(ini);
     }
-#line 1097 "parser.cpp"
+#line 950 "parser.cpp"
     break;
 
   case 19:
-#line 186 "../src/parser.y"
+#line 185 "../src/parser.y"
                       {
         yylhs.value.as < std::vector<tokens::Initializer> > ()=yystack_[2].value.as < std::vector<tokens::Initializer> > ();
         tokens::Initializer ini;
@@ -1105,11 +958,11 @@ namespace yy {
         ini.name=yystack_[0].value.as < std::string > ();
         yylhs.value.as < std::vector<tokens::Initializer> > ().push_back(ini);
     }
-#line 1109 "parser.cpp"
+#line 962 "parser.cpp"
     break;
 
   case 20:
-#line 197 "../src/parser.y"
+#line 196 "../src/parser.y"
                             {
         tokens::Initializer ini;
         ini.symbol=true;
@@ -1117,11 +970,11 @@ namespace yy {
         yylhs.value.as < std::vector<tokens::Initializer> > ()=yystack_[2].value.as < std::vector<tokens::Initializer> > ();
         yylhs.value.as < std::vector<tokens::Initializer> > ().push_back(ini);
     }
-#line 1121 "parser.cpp"
+#line 974 "parser.cpp"
     break;
 
   case 21:
-#line 204 "../src/parser.y"
+#line 203 "../src/parser.y"
                              {
         tokens::Initializer ini;
         ini.symbol=false;
@@ -1129,118 +982,123 @@ namespace yy {
         yylhs.value.as < std::vector<tokens::Initializer> > ()=yystack_[2].value.as < std::vector<tokens::Initializer> > ();
         yylhs.value.as < std::vector<tokens::Initializer> > ().push_back(ini);
     }
-#line 1133 "parser.cpp"
+#line 986 "parser.cpp"
     break;
 
   case 22:
-#line 211 "../src/parser.y"
+#line 210 "../src/parser.y"
             {
         tokens::Initializer ini;
         ini.symbol=false;
         ini.value=yystack_[0].value.as < int > ();
-        yylhs.value.as < std::vector<tokens::Initializer> > ()=std::vector<tokens::Initializer>>();
+        yylhs.value.as < std::vector<tokens::Initializer> > ()=std::vector<tokens::Initializer>();
         yylhs.value.as < std::vector<tokens::Initializer> > ().push_back(ini);
     }
-#line 1145 "parser.cpp"
+#line 998 "parser.cpp"
     break;
 
   case 23:
-#line 218 "../src/parser.y"
+#line 217 "../src/parser.y"
            {
         tokens::Initializer ini;
         ini.symbol=true;
         ini.name=yystack_[0].value.as < std::string > ();
-        yylhs.value.as < std::vector<tokens::Initializer> > ()=std::vector<tokens::Initializer>>();
+        yylhs.value.as < std::vector<tokens::Initializer> > ()=std::vector<tokens::Initializer>();
         yylhs.value.as < std::vector<tokens::Initializer> > ().push_back(ini);
     }
-#line 1157 "parser.cpp"
+#line 1010 "parser.cpp"
     break;
 
   case 24:
-#line 228 "../src/parser.y"
+#line 227 "../src/parser.y"
            {
         yylhs.value.as < int > ()=yystack_[0].value.as < int > ();
     }
-#line 1165 "parser.cpp"
+#line 1018 "parser.cpp"
     break;
 
   case 25:
-#line 231 "../src/parser.y"
+#line 230 "../src/parser.y"
                {
         yylhs.value.as < int > ()=-yystack_[0].value.as < int > ();
     }
-#line 1173 "parser.cpp"
+#line 1026 "parser.cpp"
     break;
 
   case 26:
-#line 234 "../src/parser.y"
+#line 233 "../src/parser.y"
         {
         yylhs.value.as < int > ()=yystack_[0].value.as < int > ();
     }
-#line 1181 "parser.cpp"
+#line 1034 "parser.cpp"
     break;
 
   case 27:
-#line 237 "../src/parser.y"
+#line 236 "../src/parser.y"
             {
         yylhs.value.as < int > ()=-yystack_[0].value.as < int > ();
     }
-#line 1189 "parser.cpp"
+#line 1042 "parser.cpp"
     break;
 
   case 28:
-#line 242 "../src/parser.y"
+#line 241 "../src/parser.y"
          {
-        yylhs.value.as < tokens::Instruction* > ()=new tokens::Instr0();
-        yylhs.value.as < tokens::Instruction* > ()->mnemonic=yystack_[0].value.as < std::string > ();
+        tokens::Instr0* inst=new tokens::Instr0();
+        inst->mnemonic=yystack_[0].value.as < std::string > ();
+        yylhs.value.as < tokens::Instruction* > ()=inst;
     }
-#line 1198 "parser.cpp"
+#line 1052 "parser.cpp"
     break;
 
   case 29:
 #line 246 "../src/parser.y"
                        {
-        yylhs.value.as < tokens::Instruction* > ()=new tokens::Instr1_op();
-        yylhs.value.as < tokens::Instruction* > ()->mnemonic=yystack_[1].value.as < std::string > ();
-        yylhs.value.as < tokens::Instruction* > ()->operand=yystack_[0].value.as < tokens::Operand > ();
+        tokens::Instr1_op*inst=new tokens::Instr1_op();
+        inst->mnemonic=yystack_[1].value.as < std::string > ();
+        inst->operand=yystack_[0].value.as < tokens::Operand > ();
+        yylhs.value.as < tokens::Instruction* > ()=inst;
     }
-#line 1208 "parser.cpp"
+#line 1063 "parser.cpp"
     break;
 
   case 30:
-#line 251 "../src/parser.y"
+#line 252 "../src/parser.y"
                 {
-        yylhs.value.as < tokens::Instruction* > ()=new tokens::Instr1_reg();
-        yylhs.value.as < tokens::Instruction* > ()->mnemonic=yystack_[1].value.as < std::string > ();
-        yylhs.value.as < tokens::Instruction* > ()->reg=yystack_[0].value.as < std::string > ();
+        tokens::Instr1_reg*inst=new tokens::Instr1_reg();
+        inst->mnemonic=yystack_[1].value.as < std::string > ();
+        inst->reg=yystack_[0].value.as < std::string > ();
+        yylhs.value.as < tokens::Instruction* > ()=inst;
     }
-#line 1218 "parser.cpp"
+#line 1074 "parser.cpp"
     break;
 
   case 31:
-#line 256 "../src/parser.y"
+#line 258 "../src/parser.y"
                               {
-        yylhs.value.as < tokens::Instruction* > ()=new tokens::Instr2_regop();
-        yylhs.value.as < tokens::Instruction* > ()->mnemonic=yystack_[3].value.as < std::string > ();
-        yylhs.value.as < tokens::Instruction* > ()->reg=yystack_[2].value.as < std::string > ();
-        yylhs.value.as < tokens::Instruction* > ()->operand=yystack_[0].value.as < tokens::Operand > ();
+        tokens::Instr2_regop*inst=new tokens::Instr2_regop();
+        inst->mnemonic=yystack_[3].value.as < std::string > ();
+        inst->reg=yystack_[2].value.as < std::string > ();
+        inst->operand=yystack_[0].value.as < tokens::Operand > ();
+        yylhs.value.as < tokens::Instruction* > ()=inst;
     }
-#line 1229 "parser.cpp"
+#line 1086 "parser.cpp"
     break;
 
   case 32:
-#line 262 "../src/parser.y"
+#line 265 "../src/parser.y"
                           {
-        yylhs.value.as < tokens::Instruction* > ()=new tokens::Instr2_regreg();
-        yylhs.value.as < tokens::Instruction* > ()->mnemonic=yystack_[3].value.as < std::string > ();
-        yylhs.value.as < tokens::Instruction* > ()->regDST=yystack_[2].value.as < std::string > ();
-        yylhs.value.as < tokens::Instruction* > ()->regSRC=yystack_[0].value.as < std::string > ();
+        tokens::Instr2_regreg*inst=new tokens::Instr2_regreg();
+        inst->mnemonic=yystack_[3].value.as < std::string > ();
+        inst->regDST=yystack_[2].value.as < std::string > ();
+        inst->regSRC=yystack_[0].value.as < std::string > ();
+        yylhs.value.as < tokens::Instruction* > ()=inst;
     }
-#line 1240 "parser.cpp"
+#line 1098 "parser.cpp"
     break;
 
   case 33:
-#line 271 "../src/parser.y"
+#line 275 "../src/parser.y"
             {
         tokens::Initializer ini;
         ini.symbol=false;
@@ -1249,11 +1107,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::IMMED;
         yylhs.value.as < tokens::Operand > ().ini=ini;
     }
-#line 1253 "parser.cpp"
+#line 1111 "parser.cpp"
     break;
 
   case 34:
-#line 279 "../src/parser.y"
+#line 283 "../src/parser.y"
            {
         tokens::Initializer ini;
         ini.symbol=true;
@@ -1262,11 +1120,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::IMMED;
         yylhs.value.as < tokens::Operand > ().ini=ini;
     }
-#line 1266 "parser.cpp"
+#line 1124 "parser.cpp"
     break;
 
   case 35:
-#line 287 "../src/parser.y"
+#line 291 "../src/parser.y"
               {
         tokens::Initializer ini;
         ini.symbol=true;
@@ -1275,11 +1133,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::PCREL;
         yylhs.value.as < tokens::Operand > ().ini=ini;
     }
-#line 1279 "parser.cpp"
+#line 1137 "parser.cpp"
     break;
 
   case 36:
-#line 295 "../src/parser.y"
+#line 299 "../src/parser.y"
                 {
         tokens::Initializer ini;
         ini.symbol=false;
@@ -1288,11 +1146,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::MEMDIR;
         yylhs.value.as < tokens::Operand > ().ini=ini;
     }
-#line 1292 "parser.cpp"
+#line 1150 "parser.cpp"
     break;
 
   case 37:
-#line 303 "../src/parser.y"
+#line 307 "../src/parser.y"
                {
         tokens::Initializer ini;
         ini.symbol=true;
@@ -1301,31 +1159,31 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::MEMDIR;
         yylhs.value.as < tokens::Operand > ().ini=ini;
     }
-#line 1305 "parser.cpp"
+#line 1163 "parser.cpp"
     break;
 
   case 38:
-#line 311 "../src/parser.y"
+#line 315 "../src/parser.y"
             {
         yylhs.value.as < tokens::Operand > ()=tokens::Operand();
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::REGDIR;
         yylhs.value.as < tokens::Operand > ().reg=yystack_[0].value.as < std::string > ();
     }
-#line 1315 "parser.cpp"
+#line 1173 "parser.cpp"
     break;
 
   case 39:
-#line 316 "../src/parser.y"
+#line 320 "../src/parser.y"
                     {
         yylhs.value.as < tokens::Operand > ()=tokens::Operand();
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::REGIND;
         yylhs.value.as < tokens::Operand > ().reg=yystack_[1].value.as < std::string > ();
     }
-#line 1325 "parser.cpp"
+#line 1183 "parser.cpp"
     break;
 
   case 40:
-#line 321 "../src/parser.y"
+#line 325 "../src/parser.y"
                                 {
         tokens::Initializer ini;
         ini.symbol=false;
@@ -1335,11 +1193,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().ini=ini;
         yylhs.value.as < tokens::Operand > ().reg=yystack_[3].value.as < std::string > ();
     }
-#line 1339 "parser.cpp"
+#line 1197 "parser.cpp"
     break;
 
   case 41:
-#line 330 "../src/parser.y"
+#line 334 "../src/parser.y"
                                {
         tokens::Initializer ini;
         ini.symbol=true;
@@ -1349,11 +1207,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().ini=ini;
         yylhs.value.as < tokens::Operand > ().reg=yystack_[3].value.as < std::string > ();
     }
-#line 1353 "parser.cpp"
+#line 1211 "parser.cpp"
     break;
 
   case 42:
-#line 343 "../src/parser.y"
+#line 347 "../src/parser.y"
                 {
         tokens::Initializer ini;
         ini.symbol=false;
@@ -1362,11 +1220,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::IMMED;
         yylhs.value.as < tokens::Operand > ().ini=ini;
     }
-#line 1366 "parser.cpp"
+#line 1224 "parser.cpp"
     break;
 
   case 43:
-#line 351 "../src/parser.y"
+#line 355 "../src/parser.y"
                {
         tokens::Initializer ini;
         ini.symbol=true;
@@ -1376,11 +1234,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().ini=ini;
 
     }
-#line 1380 "parser.cpp"
+#line 1238 "parser.cpp"
     break;
 
   case 44:
-#line 360 "../src/parser.y"
+#line 364 "../src/parser.y"
               {
         tokens::Initializer ini;
         ini.symbol=true;
@@ -1389,11 +1247,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::PCREL;
         yylhs.value.as < tokens::Operand > ().ini=ini;
     }
-#line 1393 "parser.cpp"
+#line 1251 "parser.cpp"
     break;
 
   case 45:
-#line 368 "../src/parser.y"
+#line 372 "../src/parser.y"
             {
         tokens::Initializer ini;
         ini.symbol=false;
@@ -1402,11 +1260,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::MEMDIR;
         yylhs.value.as < tokens::Operand > ().ini=ini;
     }
-#line 1406 "parser.cpp"
+#line 1264 "parser.cpp"
     break;
 
   case 46:
-#line 376 "../src/parser.y"
+#line 380 "../src/parser.y"
            {
         tokens::Initializer ini;
         ini.symbol=true;
@@ -1415,31 +1273,31 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::MEMDIR;
         yylhs.value.as < tokens::Operand > ().ini=ini;
     }
-#line 1419 "parser.cpp"
+#line 1277 "parser.cpp"
     break;
 
   case 47:
-#line 384 "../src/parser.y"
+#line 388 "../src/parser.y"
         {
         yylhs.value.as < tokens::Operand > ()=tokens::Operand();
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::REGDIR;
         yylhs.value.as < tokens::Operand > ().reg=yystack_[0].value.as < std::string > ();
     }
-#line 1429 "parser.cpp"
+#line 1287 "parser.cpp"
     break;
 
   case 48:
-#line 389 "../src/parser.y"
+#line 393 "../src/parser.y"
                 {
         yylhs.value.as < tokens::Operand > ()=tokens::Operand();
         yylhs.value.as < tokens::Operand > ().adr=tokens::Addressing::REGIND;
         yylhs.value.as < tokens::Operand > ().reg=yystack_[1].value.as < std::string > ();
     }
-#line 1439 "parser.cpp"
+#line 1297 "parser.cpp"
     break;
 
   case 49:
-#line 394 "../src/parser.y"
+#line 398 "../src/parser.y"
                             {
         tokens::Initializer ini;
         ini.symbol=false;
@@ -1449,11 +1307,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().ini=ini;
         yylhs.value.as < tokens::Operand > ().reg=yystack_[3].value.as < std::string > ();
     }
-#line 1453 "parser.cpp"
+#line 1311 "parser.cpp"
     break;
 
   case 50:
-#line 403 "../src/parser.y"
+#line 407 "../src/parser.y"
                            {
         tokens::Initializer ini;
         ini.symbol=true;
@@ -1463,11 +1321,11 @@ namespace yy {
         yylhs.value.as < tokens::Operand > ().ini=ini;
         yylhs.value.as < tokens::Operand > ().reg=yystack_[3].value.as < std::string > ();
     }
-#line 1467 "parser.cpp"
+#line 1325 "parser.cpp"
     break;
 
 
-#line 1471 "parser.cpp"
+#line 1329 "parser.cpp"
 
             default:
               break;
@@ -1857,7 +1715,7 @@ namespace yy {
   const char*
   const parser::yytname_[] =
   {
-  "$end", "error", "$undefined", "\"-\"", "\"+\"", "\"*\"", "\"/\"",
+  "YYEOF", "error", "$undefined", "\"-\"", "\"+\"", "\"*\"", "\"/\"",
   "\"(\"", "\")\"", "\"[\"", "\"]\"", "\",\"", "\":\"", "\"$\"", "\"#\"",
   "\"%\"", "GLOBAL", "EXTERN", "SECTION", "WORD", "SKIP", "EQU", "\"pc\"",
   "\"sp\"", "\"psw\"", "REG", "SYMBOL", "NUMBER", "HEX", "MNM0", "MNM1OP",
@@ -1871,11 +1729,11 @@ namespace yy {
   parser::yyrline_[] =
   {
        0,    87,    87,    91,    92,    99,   100,   103,   106,   113,
-     119,   122,   128,   133,   141,   151,   157,   166,   179,   186,
-     197,   204,   211,   218,   228,   231,   234,   237,   242,   246,
-     251,   256,   262,   271,   279,   287,   295,   303,   311,   316,
-     321,   330,   343,   351,   360,   368,   376,   384,   389,   394,
-     403
+     119,   122,   128,   133,   141,   150,   156,   165,   178,   185,
+     196,   203,   210,   217,   227,   230,   233,   236,   241,   246,
+     252,   258,   265,   275,   283,   291,   299,   307,   315,   320,
+     325,   334,   347,   355,   364,   372,   380,   388,   393,   398,
+     407
   };
 
   // Print the state stack on the debug stream.
@@ -1909,13 +1767,13 @@ namespace yy {
 
 
 } // yy
-#line 1913 "parser.cpp"
+#line 1771 "parser.cpp"
 
-#line 415 "../src/parser.y"
+#line 419 "../src/parser.y"
 
 
-void
-yy::parser::error (const location_type& l, const std::string& m)
+void yy::parser::error (const location_type& l, const std::string& m)
 {
   std::cerr << l << ": " << m << '\n';
-}
+};
+

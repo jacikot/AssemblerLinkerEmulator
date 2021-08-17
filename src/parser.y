@@ -9,22 +9,21 @@
 
 %code requires {
   # include <string>
-  class driver;
+  # include "../h/tokens.h"
+  class Driver;
 }
 
 // The parsing context.
-%param { driver& drv }
+%param { Driver& drv }
+
+%code {
+# include "../h/driver.h"
+}
 
 %locations
 
 %define parse.trace
 %define parse.error verbose
-
-
-%code {
-# include "driver.h"
-#include "tokens.h"
-}
 
 %define api.token.prefix {TOK_}
 
@@ -52,6 +51,7 @@
   REG_PC  "pc"
   REG_SP  "sp"
   REG_PSW "psw"
+  YYEOF 0
 ;
 
 %token <std::string> REG
@@ -65,7 +65,7 @@
 %token <std::string> MNM2REGREG
 %token <std::string> COMMENT
 
-%type <std::vector<tokens::Line>> lines
+%type <std::string> lines
 %type <tokens::Line> line
 %type <std::string> label
 %type <int> literal
@@ -78,7 +78,7 @@
 %type <tokens::Operand> operand_jmp
 
 
-%printer { yyo << $$; } <*>;
+//%printer { yyo << $$; } <*>;
 
 %%
 %start code;
@@ -90,7 +90,7 @@ code:
 lines:   
     %empty {}
 |   lines line {
-        drv.assemler.addLine($2);
+        drv.assembler.addLine($2);
     }
 ;
 
@@ -104,7 +104,7 @@ line:
         $$=$2;
     }
 |   expression {
-        $$=Line();
+        $$=tokens::Line();
         $$.exp=$1;
     }
 ;
@@ -128,14 +128,14 @@ directive:
     GLOBAL symbols {
         $$=new tokens::Directive();
         $$->symbols=$2;
-        $$->tupe=tokens::DirType::GLOBAL;
+        $$->type=tokens::DirType::GLOBAL;
     }
 |   EXTERN symbols {
         $$=new tokens::Directive();
         $$->symbols=$2;
-        $$->tupe=tokens::DirType::EXTERN;
+        $$->type=tokens::DirType::EXTERN;
         for (tokens::Initializer i:$2){
-            drv.assembler.addUndefinedSyumbol(i.name);
+            drv.assembler.addUndefinedSymbol(i.name);
         }
     }
 |   SECTION SYMBOL {
@@ -144,15 +144,14 @@ directive:
         ini.symbol=true;
         ini.name=$2;
         $$->symbols.push_back(ini);
-        $$->tupe=tokens::DirType::SECTION;
-        drv.assembler.addSection($2)
-        drv.assembler.symbolTable.addSection($2);
+        $$->type=tokens::DirType::SECTION;
+        drv.assembler.addSection($2);
     }
 |   WORD initializers {
         $$=new tokens::Directive();
         $$->symbols=$2;
-        $$->tupe=tokens::DirType::WORD;
-        drv.assembler.addToCounter($$.symbols.size()*2);
+        $$->type=tokens::DirType::WORD;
+        drv.assembler.addToCounter($$->symbols.size()*2);
     }
 |   SKIP literal {
         $$=new tokens::Directive();
@@ -160,7 +159,7 @@ directive:
         ini.symbol=false;
         ini.value=$2;
         $$->symbols.push_back(ini);
-        $$->tupe=tokens::DirType::SKIP;
+        $$->type=tokens::DirType::SKIP;
         drv.assembler.addToCounter($2);
     } 
 |   EQU SYMBOL "," literal {
@@ -169,7 +168,7 @@ directive:
         ini.symbol=false;
         ini.value=$4;
         $$->symbols.push_back(ini);
-        $$->tupe=tokens::DirType::EQU;
+        $$->type=tokens::DirType::EQU;
         $$->toInitialize=$2;
         drv.assembler.addAbsoluteSymbol($2,$4);
     }
@@ -180,7 +179,7 @@ symbols:
         tokens::Initializer ini;        
         ini.symbol=true;
         ini.name=$1;
-        $$=std::vector<tokens::Initializer>>();
+        $$=std::vector<tokens::Initializer>();
         $$.push_back(ini);
     }
 |   symbols "," SYMBOL{
@@ -212,14 +211,14 @@ initializers:
         tokens::Initializer ini;
         ini.symbol=false;
         ini.value=$1;
-        $$=std::vector<tokens::Initializer>>();
+        $$=std::vector<tokens::Initializer>();
         $$.push_back(ini);
     }
 |   SYMBOL {
         tokens::Initializer ini;
         ini.symbol=true;
         ini.name=$1;
-        $$=std::vector<tokens::Initializer>>();
+        $$=std::vector<tokens::Initializer>();
         $$.push_back(ini);
     }
 ;
@@ -240,30 +239,35 @@ literal:
 ;
 instruction:
     MNM0 {
-        $$=new tokens::Instr0();
-        $$->mnemonic=$1;
+        tokens::Instr0* inst=new tokens::Instr0();
+        inst->mnemonic=$1;
+        $$=inst;
     }
 |   MNM1OP operand_jmp {
-        $$=new tokens::Instr1_op();
-        $$->mnemonic=$1;
-        $$->operand=$2;
+        tokens::Instr1_op*inst=new tokens::Instr1_op();
+        inst->mnemonic=$1;
+        inst->operand=$2;
+        $$=inst;
     }
 |   MNM1REG REG {
-        $$=new tokens::Instr1_reg();
-        $$->mnemonic=$1;
-        $$->reg=$2;
+        tokens::Instr1_reg*inst=new tokens::Instr1_reg();
+        inst->mnemonic=$1;
+        inst->reg=$2;
+        $$=inst;
     }
 |   MNM2REGOP REG "," operand {
-        $$=new tokens::Instr2_regop();
-        $$->mnemonic=$1;
-        $$->reg=$2;
-        $$->operand=$4;
+        tokens::Instr2_regop*inst=new tokens::Instr2_regop();
+        inst->mnemonic=$1;
+        inst->reg=$2;
+        inst->operand=$4;
+        $$=inst;
     }
 |   MNM2REGREG REG "," REG{
-        $$=new tokens::Instr2_regreg();
-        $$->mnemonic=$1;
-        $$->regDST=$2;
-        $$->regSRC=$4;
+        tokens::Instr2_regreg*inst=new tokens::Instr2_regreg();
+        inst->mnemonic=$1;
+        inst->regDST=$2;
+        inst->regSRC=$4;
+        $$=inst;
     }
 ;
 
@@ -414,8 +418,8 @@ operand:
 
 %%
 
-void
-yy::parser::error (const location_type& l, const std::string& m)
+void yy::parser::error (const location_type& l, const std::string& m)
 {
   std::cerr << l << ": " << m << '\n';
-}
+};
+

@@ -1,4 +1,4 @@
-# include "symboltable.h"
+# include "../h/symboltable.h"
 # include <vector>
 void SymbolTable::addSymbol(std::string name, std::string section, int value){
     if(table->find(name)!=table->end()){

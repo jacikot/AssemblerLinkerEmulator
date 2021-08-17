@@ -47,9 +47,10 @@
 #line 10 "../src/parser.y"
 
   # include <string>
-  class driver;
+  # include "../h/tokens.h"
+  class Driver;
 
-#line 53 "parser.h"
+#line 54 "parser.h"
 
 
 # include <cstdlib> // std::abort
@@ -183,7 +184,7 @@
 #endif
 
 namespace yy {
-#line 187 "parser.h"
+#line 188 "parser.h"
 
 
 
@@ -378,6 +379,7 @@ namespace yy {
       // MNM2REGOP
       // MNM2REGREG
       // COMMENT
+      // lines
       // label
       char dummy2[sizeof (std::string)];
 
@@ -385,24 +387,21 @@ namespace yy {
       // initializers
       char dummy3[sizeof (std::vector<tokens::Initializer>)];
 
-      // lines
-      char dummy4[sizeof (std::vector<tokens::Line>)];
-
       // directive
-      char dummy5[sizeof (tokens::Directive*)];
+      char dummy4[sizeof (tokens::Directive*)];
 
       // expression
-      char dummy6[sizeof (tokens::Expression*)];
+      char dummy5[sizeof (tokens::Expression*)];
 
       // instruction
-      char dummy7[sizeof (tokens::Instruction*)];
+      char dummy6[sizeof (tokens::Instruction*)];
 
       // line
-      char dummy8[sizeof (tokens::Line)];
+      char dummy7[sizeof (tokens::Line)];
 
       // operand_jmp
       // operand
-      char dummy9[sizeof (tokens::Operand)];
+      char dummy8[sizeof (tokens::Operand)];
     };
 
     /// The size of the largest semantic type.
@@ -447,6 +446,7 @@ namespace yy {
     {
       enum yytokentype
       {
+        TOK_YYEOF = 0,
         TOK_MINUS = 3,
         TOK_PLUS = 4,
         TOK_STAR = 5,
@@ -572,19 +572,6 @@ namespace yy {
       {}
 #endif
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, std::vector<tokens::Line>&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const std::vector<tokens::Line>& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, tokens::Directive*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -686,6 +673,7 @@ switch (yytype)
       case 32: // MNM2REGOP
       case 33: // MNM2REGREG
       case 34: // COMMENT
+      case 37: // lines
       case 39: // label
         value.template destroy< std::string > ();
         break;
@@ -693,10 +681,6 @@ switch (yytype)
       case 42: // symbols
       case 43: // initializers
         value.template destroy< std::vector<tokens::Initializer> > ();
-        break;
-
-      case 37: // lines
-        value.template destroy< std::vector<tokens::Line> > ();
         break;
 
       case 41: // directive
@@ -796,13 +780,13 @@ switch (yytype)
       symbol_type (int tok, location_type l)
         : super_type(token_type (tok), std::move (l))
       {
-        YY_ASSERT (tok == 0 || tok == token::TOK_MINUS || tok == token::TOK_PLUS || tok == token::TOK_STAR || tok == token::TOK_SLASH || tok == token::TOK_LPAREN || tok == token::TOK_RPAREN || tok == token::TOK_LBRACK || tok == token::TOK_RBRACK || tok == token::TOK_COMMA || tok == token::TOK_COLON || tok == token::TOK_DOLLAR || tok == token::TOK_HASH || tok == token::TOK_PERCENT || tok == token::TOK_GLOBAL || tok == token::TOK_EXTERN || tok == token::TOK_SECTION || tok == token::TOK_WORD || tok == token::TOK_SKIP || tok == token::TOK_EQU || tok == token::TOK_REG_PC || tok == token::TOK_REG_SP || tok == token::TOK_REG_PSW);
+        YY_ASSERT (tok == token::TOK_YYEOF || tok == token::TOK_MINUS || tok == token::TOK_PLUS || tok == token::TOK_STAR || tok == token::TOK_SLASH || tok == token::TOK_LPAREN || tok == token::TOK_RPAREN || tok == token::TOK_LBRACK || tok == token::TOK_RBRACK || tok == token::TOK_COMMA || tok == token::TOK_COLON || tok == token::TOK_DOLLAR || tok == token::TOK_HASH || tok == token::TOK_PERCENT || tok == token::TOK_GLOBAL || tok == token::TOK_EXTERN || tok == token::TOK_SECTION || tok == token::TOK_WORD || tok == token::TOK_SKIP || tok == token::TOK_EQU || tok == token::TOK_REG_PC || tok == token::TOK_REG_SP || tok == token::TOK_REG_PSW);
       }
 #else
       symbol_type (int tok, const location_type& l)
         : super_type(token_type (tok), l)
       {
-        YY_ASSERT (tok == 0 || tok == token::TOK_MINUS || tok == token::TOK_PLUS || tok == token::TOK_STAR || tok == token::TOK_SLASH || tok == token::TOK_LPAREN || tok == token::TOK_RPAREN || tok == token::TOK_LBRACK || tok == token::TOK_RBRACK || tok == token::TOK_COMMA || tok == token::TOK_COLON || tok == token::TOK_DOLLAR || tok == token::TOK_HASH || tok == token::TOK_PERCENT || tok == token::TOK_GLOBAL || tok == token::TOK_EXTERN || tok == token::TOK_SECTION || tok == token::TOK_WORD || tok == token::TOK_SKIP || tok == token::TOK_EQU || tok == token::TOK_REG_PC || tok == token::TOK_REG_SP || tok == token::TOK_REG_PSW);
+        YY_ASSERT (tok == token::TOK_YYEOF || tok == token::TOK_MINUS || tok == token::TOK_PLUS || tok == token::TOK_STAR || tok == token::TOK_SLASH || tok == token::TOK_LPAREN || tok == token::TOK_RPAREN || tok == token::TOK_LBRACK || tok == token::TOK_RBRACK || tok == token::TOK_COMMA || tok == token::TOK_COLON || tok == token::TOK_DOLLAR || tok == token::TOK_HASH || tok == token::TOK_PERCENT || tok == token::TOK_GLOBAL || tok == token::TOK_EXTERN || tok == token::TOK_SECTION || tok == token::TOK_WORD || tok == token::TOK_SKIP || tok == token::TOK_EQU || tok == token::TOK_REG_PC || tok == token::TOK_REG_SP || tok == token::TOK_REG_PSW);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -834,7 +818,7 @@ switch (yytype)
     };
 
     /// Build a parser object.
-    parser (driver& drv_yyarg);
+    parser (Driver& drv_yyarg);
     virtual ~parser ();
 
     /// Parse.  An alias for parse ().
@@ -868,6 +852,21 @@ switch (yytype)
     void error (const syntax_error& err);
 
     // Implementation of make_symbol for each symbol type.
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_YYEOF (location_type l)
+      {
+        return symbol_type (token::TOK_YYEOF, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_YYEOF (const location_type& l)
+      {
+        return symbol_type (token::TOK_YYEOF, l);
+      }
+#endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
@@ -1662,7 +1661,7 @@ switch (yytype)
 
 
     // User arguments.
-    driver& drv;
+    Driver& drv;
   };
 
   inline
@@ -1696,6 +1695,7 @@ switch (yytype)
       case 32: // MNM2REGOP
       case 33: // MNM2REGREG
       case 34: // COMMENT
+      case 37: // lines
       case 39: // label
         value.move< std::string > (std::move (that.value));
         break;
@@ -1703,10 +1703,6 @@ switch (yytype)
       case 42: // symbols
       case 43: // initializers
         value.move< std::vector<tokens::Initializer> > (std::move (that.value));
-        break;
-
-      case 37: // lines
-        value.move< std::vector<tokens::Line> > (std::move (that.value));
         break;
 
       case 41: // directive
@@ -1759,6 +1755,7 @@ switch (yytype)
       case 32: // MNM2REGOP
       case 33: // MNM2REGREG
       case 34: // COMMENT
+      case 37: // lines
       case 39: // label
         value.copy< std::string > (YY_MOVE (that.value));
         break;
@@ -1766,10 +1763,6 @@ switch (yytype)
       case 42: // symbols
       case 43: // initializers
         value.copy< std::vector<tokens::Initializer> > (YY_MOVE (that.value));
-        break;
-
-      case 37: // lines
-        value.copy< std::vector<tokens::Line> > (YY_MOVE (that.value));
         break;
 
       case 41: // directive
@@ -1829,6 +1822,7 @@ switch (yytype)
       case 32: // MNM2REGOP
       case 33: // MNM2REGREG
       case 34: // COMMENT
+      case 37: // lines
       case 39: // label
         value.move< std::string > (YY_MOVE (s.value));
         break;
@@ -1836,10 +1830,6 @@ switch (yytype)
       case 42: // symbols
       case 43: // initializers
         value.move< std::vector<tokens::Initializer> > (YY_MOVE (s.value));
-        break;
-
-      case 37: // lines
-        value.move< std::vector<tokens::Line> > (YY_MOVE (s.value));
         break;
 
       case 41: // directive
@@ -1918,7 +1908,7 @@ switch (yytype)
   }
 
 } // yy
-#line 1922 "parser.h"
+#line 1912 "parser.h"
 
 
 

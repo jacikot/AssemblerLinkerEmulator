@@ -1,3 +1,6 @@
+#ifndef ASSEMBLER
+#define ASSEMBLER
+
 # include <vector>
 # include <string>
 # include "symboltable.h" 
@@ -22,3 +25,5 @@ class Assembler{
         std::string curSection="";
     
 };
+
+#endif

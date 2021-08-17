@@ -618,14 +618,14 @@ char *yytext;
 # include <cstdlib>
 # include <cstring> // strerror
 # include <string>
-# include "driver.h"
-# include "parser.h"
+# include "../h/driver.h"
+# include "../build/parser.h"
 #line 624 "scanner.cpp"
 #define YY_NO_INPUT 1
 #line 14 "../src/scanner.l"
   // A number symbol corresponding to the value in S.
-  yy::parser::symbol_type
-  make_NUMBER (const std::string &s, const yy::parser::location_type& loc);
+  yy::parser::symbol_type make_NUMBER (const std::string &s, const yy::parser::location_type& loc);
+  yy::parser::symbol_type make_HEX (const std::string &s, const yy::parser::location_type& loc);
 #line 630 "scanner.cpp"
 #line 33 "../src/scanner.l"
   // Code run each time a pattern is matched.
@@ -1108,7 +1108,7 @@ return yy::parser::make_YYEOF  (loc);
 case 23:
 YY_RULE_SETUP
 #line 68 "../src/scanner.l"
-return yy::parser::make_REG    (lyytext,oc);
+return yy::parser::make_REG    (yytext,loc);
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
@@ -1163,7 +1163,7 @@ return make_HEX (yytext, loc);
 case 34:
 YY_RULE_SETUP
 #line 81 "../src/scanner.l"
-return make_COMMENT (yytext, loc);
+return yy::parser::make_COMMENT (yytext, loc);
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
@@ -2313,7 +2313,7 @@ yy::parser::symbol_type make_HEX (const std::string &s, const yy::parser::locati
 }
 
 
-void driver::scan_begin ()
+void Driver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
   if (file.empty () || file == "-")
@@ -2325,7 +2325,7 @@ void driver::scan_begin ()
     }
 }
 
-void driver::scan_end ()
+void Driver::scan_end ()
 {
   fclose (yyin);
 }

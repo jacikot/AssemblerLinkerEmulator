@@ -1,6 +1,32 @@
+#ifndef TOKENS
+#define TOKENS
+
+
 #include <string>
 #include <vector>
 namespace tokens{
+
+    class Expression{
+        
+    };
+
+    class Initializer{
+        public:
+            bool symbol;
+            std::string name;
+            int value;
+    };
+
+    enum Addressing{
+        IMMED, PCREL, MEMDIR, REGDIR, REGIND, REGINDPOM
+    };
+    class Operand{
+        public:
+            Addressing adr;
+            Initializer ini;
+            std::string reg;
+    };
+
     class Line{
         public:
             Expression* exp;
@@ -10,10 +36,6 @@ namespace tokens{
         GLOBAL, EXTERN, SECTION, SKIP, WORD, EQU
     };
 
-
-    class Expression{
-        
-    };
 
     class Directive : public Expression{
         public:
@@ -54,22 +76,8 @@ namespace tokens{
             std::string reg;
     };
 
-    class Initializer{
-        public:
-            bool symbol;
-            std::string name;
-            int value;
-    };
-
-    enum Addressing{
-        IMMED, PCREL, MEMDIR, REGDIR, REGIND, REGINDPOM
-    };
-    class Operand{
-        public:
-            Addressing adr;
-            Initializer ini;
-            std::string reg;
-    };
+    
 
 }
 
+#endif
