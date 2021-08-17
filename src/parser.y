@@ -61,9 +61,9 @@
 %token <std::vector<tokens::Line>> lines
 %token <tokens::Line> line
 %token <std::string> label
-%token <tokens::Expression> expression
-%token <tokens::Directive> directive
-%token <tokens::Instruction> instruction
+%token <tokens::Expression*> expression
+%token <tokens::Directive*> directive
+%token <tokens::Instruction*> instruction
 %token <std::vector<tokens::Initializer>> symbols
 %token <std::string> SYMBOL
 %token <int> literal
@@ -77,13 +77,13 @@
 %token <std::string> COMMENT
 %token <tokens::Initializer> initializer
 %token <std::vector<tokens::Initializer>> initializers
-%token <tokens::Instr0> instr0
-%token <tokens::Instr1_reg> instr1_reg
-%token <tokens::Instr1_op> Instr1_op
-%token <tokens::Instr2_regreg> instr2_regreg
-%token <tokens::Instr2_regop> instr2_regop
-%token <int> operand
-%token <int> operand_jmp
+%token <tokens::Instr0*> instr0
+%token <tokens::Instr1_reg*> instr1_reg
+%token <tokens::Instr1_op*> Instr1_op
+%token <tokens::Instr2_regreg*> instr2_regreg
+%token <tokens::Instr2_regop*> instr2_regop
+%token <tokens::Operand> operand
+%token <tokens::Operand> operand_jmp
 
 
 %printer { yyo << $$; } <*>;
@@ -104,7 +104,8 @@ lines:
 
 //!!!! labela na kraju svega?
 line:
-    label line {
+    %empty {}
+|   label line {
         $$=$2;
     }
 |   COMMENT "\n" line {
@@ -133,59 +134,58 @@ expression:
 
 directive:
     GLOBAL symbols {
-        $$=tokens::Directive();
-        $$.symbols=$2;
-        $$.tupe=DirType::GLOBAL;
+        $$=new tokens::Directive();
+        $$->symbols=$2;
+        $$->tupe=tokens::DirType::GLOBAL;
     }
 |   EXTERN symbols {
-        $$=tokens::Directive();
-        $$.symbols=$2;
-        $$.tupe=DirType::EXTERN;
+        $$=new tokens::Directive();
+        $$->symbols=$2;
+        $$->tupe=tokens::DirType::EXTERN;
+        for (tokens::Initializer i:$2){
+            drv.assembler.addUndefinedSyumbol(i.name);
+        }
     }
 |   SECTION SYMBOL {
-        $$=tokens::Directive();
-        Initializer ini;
+        $$=new tokens::Directive();
+        tokens::Initializer ini;
         ini.symbol=true;
         ini.name=$2;
-        $$.symbols.push_back(ini);
-        $$.tupe=DirType::SECTION;
+        $$->symbols.push_back(ini);
+        $$->tupe=tokens::DirType::SECTION;
         drv.assembler.addSection($2)
         drv.assembler.symbolTable.addSection($2);
     }
 |   WORD initializers {
-        $$=tokens::Directive();
-        $$.symbols=$2;
-        $$.tupe=DirType::WORD;
+        $$=new tokens::Directive();
+        $$->symbols=$2;
+        $$->tupe=tokens::DirType::WORD;
         drv.assembler.addToCounter($$.symbols.size()*2);
     }
 |   SKIP literal {
-        $$=tokens::Directive();
-        Initializer ini;
+        $$=new tokens::Directive();
+        tokens::Initializer ini;
         ini.symbol=false;
         ini.value=$2;
-        $$.symbols.push_back(ini);
-        $$.tupe=DirType::SKIP;
+        $$->symbols.push_back(ini);
+        $$->tupe=tokens::DirType::SKIP;
         drv.assembler.addToCounter($2);
     } 
 |   EQU SYMBOL "," literal {
-        $$=tokens::Directive();
-        Initializer ini;
+        $$=new tokens::Directive();
+        tokens::Initializer ini;
         ini.symbol=false;
         ini.value=$4;
-        $$.symbols.push_back(ini);
-        $$.tupe=DirType::EQU;
-        $$.toInitialize=$2;
+        $$->symbols.push_back(ini);
+        $$->tupe=tokens::DirType::EQU;
+        $$->toInitialize=$2;
         drv.assembler.addAbsoluteSymbol($2,$4);
-    }
-|   END {
-        //postavi flag u driveru i ako je on postavljen na dalje ne obradjuj tekst
-        
     }
 ;
 
 symbols:
     SYMBOL {
-        Initializer ini;
+        tokens::Initializer ini;        
         ini.symbol=true;
         ini.name=$1;
         $$=std::vector<tokens::Initializer>>();
@@ -193,7 +193,7 @@ symbols:
     }
 |   symbols "," SYMBOL{
         $$=$1;
-        Initializer ini;
+        tokens::Initializer ini;
         ini.symbol=true;
         ini.name=$3;
         $$.push_back(ini);
@@ -203,28 +203,28 @@ symbols:
 
 initializers:
     initializers "," SYMBOL {
-        Initializer ini;
+        tokens::Initializer ini;
         ini.symbol=true;
         ini.name=$3;
         $$=$1;
         $$.push_back(ini);
     }
 |   initializers "," literal {
-        Initializer ini;
+        tokens::Initializer ini;
         ini.symbol=false;
         ini.value=$3;
         $$=$1;
         $$.push_back(ini);
     }
 |   literal {
-        Initializer ini;
+        tokens::Initializer ini;
         ini.symbol=false;
         ini.value=$1;
         $$=std::vector<tokens::Initializer>>();
         $$.push_back(ini);
     }
 |   SYMBOL {
-        Initializer ini;
+        tokens::Initializer ini;
         ini.symbol=true;
         ini.name=$1;
         $$=std::vector<tokens::Initializer>>();
@@ -247,73 +247,175 @@ literal:
     }
 ;
 instruction:
-    MNM0
-|   MNM1OP operand_jmp
-|   MNM1REG REG
-|   MNM2REGOP REG "," operand
-|   MNM2REGREG REG "," REG
+    MNM0 {
+        $$=new tokens::Instr0();
+        $$->mnemonic=$1;
+    }
+|   MNM1OP operand_jmp {
+        $$=new tokens::Instr1_op();
+        $$->mnemonic=$1;
+        $$->operand=$2;
+    }
+|   MNM1REG REG {
+        $$=new tokens::Instr1_reg();
+        $$->mnemonic=$1;
+        $$->reg=$2;
+    }
+|   MNM2REGOP REG "," operand {
+        $$=new tokens::Instr2_regop();
+        $$->mnemonic=$1;
+        $$->reg=$2;
+        $$->operand=$4;
+    }
+|   MNM2REGREG REG "," REG{
+        $$=new tokens::Instr2_regreg();
+        $$->mnemonic=$1;
+        $$->regDST=$2;
+        $$->regSRC=$4;
+    }
 ;
 
 operand_jmp:
     literal {
-        $$=$1;
+        tokens::Initializer ini;
+        ini.symbol=false;
+        ini.value=$1;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::IMMED;
+        $$.ini=ini;
     }
 |   SYMBOL {
-        //uzmi za vrednost simbola iz tabele simbola, apsolutno adresiranje
-
+        tokens::Initializer ini;
+        ini.symbol=true;
+        ini.name=$1;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::IMMED;
+        $$.ini=ini;
     }
 |   "%" SYMBOL{
-        //pc relativno adresiranje
+        tokens::Initializer ini;
+        ini.symbol=true;
+        ini.name=$2;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::PCREL;
+        $$.ini=ini;
     }
 |   "*" literal {
-        //sa adrese u memoriji koja ima vr literala
+        tokens::Initializer ini;
+        ini.symbol=false;
+        ini.value=$2;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::MEMDIR;
+        $$.ini=ini;
     }
 |   "*" SYMBOL {
-        //sa adrese u memoriji koja ima vrednost simbola
+        tokens::Initializer ini;
+        ini.symbol=true;
+        ini.name=$2;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::MEMDIR;
+        $$.ini=ini;
     }
 |   "*" REG {
-        //vrednost iz registra
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::REGDIR;
+        $$.reg=$2;
     }
 |   "*" "[" REG "]" {
-        //vrednost iz memorije adresa iz registra
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::REGIND;
+        $$.reg=$3;
     }
 |   "*" "[" REG "+" literal "]" {
-        //vrednost iz memorije adresa iz registra +literal
+        tokens::Initializer ini;
+        ini.symbol=false;
+        ini.value=$5;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::REGINDPOM;
+        $$.ini=ini;
+        $$.reg=$3;
     }
 |   "*" "[" REG "+" SYMBOL "]" {
-        //vrednost iz memorije adresa iz registra + symbol
+        tokens::Initializer ini;
+        ini.symbol=true;
+        ini.name=$5;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::REGINDPOM;
+        $$.ini=ini;
+        $$.reg=$3;
     }
 
 ;
 
 operand:
     "$" literal {
-        $$=$2;
+        tokens::Initializer ini;
+        ini.symbol=false;
+        ini.value=$2;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::IMMED;
+        $$.ini=ini;
     }
 |   "$" SYMBOL {
-        //uzmi za vrednost simbola iz tabele simbola, apsolutno adresiranje
+        tokens::Initializer ini;
+        ini.symbol=true;
+        ini.name=$2;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::IMMED;
+        $$.ini=ini;
 
     }
 |   "%" SYMBOL{
-        //pc relativno adresiranje
+        tokens::Initializer ini;
+        ini.symbol=true;
+        ini.name=$2;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::PCREL;
+        $$.ini=ini;
     }
 |   literal {
-        //sa adrese u memoriji koja ima vr literala
+        tokens::Initializer ini;
+        ini.symbol=false;
+        ini.value=$1;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::MEMDIR;
+        $$.ini=ini;
     }
 |   SYMBOL {
-        //sa adrese u memoriji koja ima vrednost simbola
+        tokens::Initializer ini;
+        ini.symbol=true;
+        ini.name=$1;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::MEMDIR;
+        $$.ini=ini;
     }
 |   REG {
-        //vrednost iz registra
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::REGDIR;
+        $$.reg=$1;
     }
 |   "[" REG "]" {
-        //vrednost iz memorije adresa iz registra
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::REGIND;
+        $$.reg=$2;
     }
 |   "[" REG "+" literal "]" {
-        //vrednost iz memorije adresa iz registra +literal
+        tokens::Initializer ini;
+        ini.symbol=false;
+        ini.value=$4;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::REGINDPOM;
+        $$.ini=ini;
+        $$.reg=$2;
     }
 |   "[" REG "+" SYMBOL "]" {
-        //vrednost iz memorije adresa iz registra + symbol
+        tokens::Initializer ini;
+        ini.symbol=true;
+        ini.name=$4;
+        $$=tokens::Operand();
+        $$.adr=tokens::Addressing::REGINDPOM;
+        $$.ini=ini;
+        $$.reg=$2;
     }
 
 ;

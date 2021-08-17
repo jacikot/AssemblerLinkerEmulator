@@ -21,7 +21,6 @@ class Driver
     Driver ();
     
     Assembler assembler;
-    bool stop=false;
 
     int result;
     // Run the parser on file F.  Return 0 on success.

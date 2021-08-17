@@ -39,9 +39,11 @@ class SymbolTable{
         void setSectionSize(std::string name, int value);
 
         void addAbsoluteSymbol(std::string name, int value);
+
+        void addUndefinedSymbol(std::string name);
         ~SymbolTable(){
             delete table;
         }
 
 
-}
+};

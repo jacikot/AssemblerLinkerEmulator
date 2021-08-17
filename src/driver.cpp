@@ -5,8 +5,7 @@ Driver::Driver ()
   : trace_parsing (false), trace_scanning (false)
 {}
 
-int
-Driver::parse (const std::string &f)
+int Driver::parse (const std::string &f)
 {
   file = f;
   location.initialize (&file);

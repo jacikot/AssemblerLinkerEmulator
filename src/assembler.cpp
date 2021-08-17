@@ -19,3 +19,7 @@ void Assembler::addSection(std::string name){
 void Assembler::addAbsoluteSymbol(std::string name, int value){
     symbolTable.addAbsoluteSymbol(name,value);
 }
+
+void Assembler::addUndefinedSymbol(std::string name){
+    symbolTable.addUndefinedSymbol(name);
+}

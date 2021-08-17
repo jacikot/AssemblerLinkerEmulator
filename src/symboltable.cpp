@@ -1,5 +1,5 @@
 # include "symboltable.h"
-
+# include <vector>
 void SymbolTable::addSymbol(std::string name, std::string section, int value){
     if(table->find(name)!=table->end()){
         //handluje exception
@@ -12,6 +12,8 @@ void SymbolTable::addSymbol(std::string name, std::string section, int value){
     smb->global=false;
     smb->isSection=false;
     table->insert({name,smb});
+    std::vector<int> x;
+    
 }
 
 void SymbolTable::addSection(std::string name){
@@ -42,6 +44,19 @@ void SymbolTable::addAbsoluteSymbol(std::string name, int value){
     smb->section="ABS";
     smb->value=value;
     smb->global=false;
+    smb->isSection=false;
+    table->insert({name,smb});
+}
+
+void SymbolTable::addUndefinedSymbol(std::string name){
+    if(table->find(name)!=table->end()){
+        //handluje exception
+        return;
+    }
+    SymbolsData* smb=new SymbolsData();
+    smb->name=name;
+    smb->section="UND";
+    smb->global=true;
     smb->isSection=false;
     table->insert({name,smb});
 }

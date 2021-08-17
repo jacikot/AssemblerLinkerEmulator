@@ -3,7 +3,7 @@
 namespace tokens{
     class Line{
         public:
-            Expression exp;
+            Expression* exp;
     };
 
     enum DirType{
@@ -25,7 +25,7 @@ namespace tokens{
 
     class Instruction : public Expression{
         public:
-         std::string mnemonic;
+            std::string mnemonic;
     };
 
     class Instr0 : public Instruction{
@@ -33,19 +33,25 @@ namespace tokens{
     };
 
     class Instr1_op : public Instruction{
-
+        public:
+            Operand operand;
     };
 
     class Instr1_reg : public Instruction{
-
+        public:
+            std::string reg;
     };
 
     class Instr2_regreg : public Instruction{
-
+        public:
+            std::string regSRC;
+            std::string regDST;
     };
 
     class Instr2_regop : public Instruction{
-
+        public:
+            Operand operand;
+            std::string reg;
     };
 
     class Initializer{
@@ -53,6 +59,16 @@ namespace tokens{
             bool symbol;
             std::string name;
             int value;
+    };
+
+    enum Addressing{
+        IMMED, PCREL, MEMDIR, REGDIR, REGIND, REGINDPOM
+    };
+    class Operand{
+        public:
+            Addressing adr;
+            Initializer ini;
+            std::string reg;
     };
 
 }

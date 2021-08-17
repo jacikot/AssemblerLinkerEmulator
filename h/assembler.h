@@ -13,6 +13,7 @@ class Assembler{
             counter+=size;
         }
         void addAbsoluteSymbol(std::string name, int value);
+        void addUndefinedSymbol(std::string name);
 
     private:
         std::vector<tokens::Line>lines;
@@ -20,4 +21,4 @@ class Assembler{
         int counter=0;
         std::string curSection="";
     
-}
+};
