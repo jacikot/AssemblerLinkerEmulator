@@ -242,6 +242,7 @@ instruction:
         tokens::Instr0* inst=new tokens::Instr0();
         inst->mnemonic=$1;
         $$=inst;
+        drv.assembler.addToCounter(1); //1B instr
     }
 |   MNM1OP operand_jmp {
         tokens::Instr1_op*inst=new tokens::Instr1_op();
@@ -254,6 +255,8 @@ instruction:
         inst->mnemonic=$1;
         inst->reg=$2;
         $$=inst;
+        if(inst->mnemonic=="push"||inst->mnemonic=="pop") drv.assembler.addToCounter(3); //3B instr ldr i str
+        else drv.assembler.addToCounter(2); //2B
     }
 |   MNM2REGOP REG "," operand {
         tokens::Instr2_regop*inst=new tokens::Instr2_regop();
@@ -268,6 +271,7 @@ instruction:
         inst->regDST=$2;
         inst->regSRC=$4;
         $$=inst;
+        drv.assembler.addToCounter(2);
     }
 ;
 
@@ -279,6 +283,7 @@ operand_jmp:
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::IMMED;
         $$.ini=ini;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   SYMBOL {
         tokens::Initializer ini;
@@ -287,6 +292,7 @@ operand_jmp:
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::IMMED;
         $$.ini=ini;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   "%" SYMBOL{
         tokens::Initializer ini;
@@ -295,6 +301,7 @@ operand_jmp:
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::PCREL;
         $$.ini=ini;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   "*" literal {
         tokens::Initializer ini;
@@ -303,6 +310,7 @@ operand_jmp:
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::MEMDIR;
         $$.ini=ini;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   "*" SYMBOL {
         tokens::Initializer ini;
@@ -311,16 +319,19 @@ operand_jmp:
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::MEMDIR;
         $$.ini=ini;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   "*" REG {
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::REGDIR;
         $$.reg=$2;
+        drv.assembler.addToCounter(3); //3B instr
     }
 |   "*" "[" REG "]" {
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::REGIND;
         $$.reg=$3;
+        drv.assembler.addToCounter(3); //3B instr
     }
 |   "*" "[" REG "+" literal "]" {
         tokens::Initializer ini;
@@ -330,6 +341,7 @@ operand_jmp:
         $$.adr=tokens::Addressing::REGINDPOM;
         $$.ini=ini;
         $$.reg=$3;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   "*" "[" REG "+" SYMBOL "]" {
         tokens::Initializer ini;
@@ -339,6 +351,7 @@ operand_jmp:
         $$.adr=tokens::Addressing::REGINDPOM;
         $$.ini=ini;
         $$.reg=$3;
+        drv.assembler.addToCounter(5); //5B instr
     }
 
 ;
@@ -351,6 +364,7 @@ operand:
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::IMMED;
         $$.ini=ini;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   "$" SYMBOL {
         tokens::Initializer ini;
@@ -359,6 +373,7 @@ operand:
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::IMMED;
         $$.ini=ini;
+        drv.assembler.addToCounter(5); //5B instr
 
     }
 |   "%" SYMBOL{
@@ -368,6 +383,7 @@ operand:
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::PCREL;
         $$.ini=ini;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   literal {
         tokens::Initializer ini;
@@ -376,6 +392,7 @@ operand:
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::MEMDIR;
         $$.ini=ini;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   SYMBOL {
         tokens::Initializer ini;
@@ -384,16 +401,19 @@ operand:
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::MEMDIR;
         $$.ini=ini;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   REG {
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::REGDIR;
         $$.reg=$1;
+        drv.assembler.addToCounter(3); //3B instr
     }
 |   "[" REG "]" {
         $$=tokens::Operand();
         $$.adr=tokens::Addressing::REGIND;
         $$.reg=$2;
+        drv.assembler.addToCounter(3); //3B instr
     }
 |   "[" REG "+" literal "]" {
         tokens::Initializer ini;
@@ -403,6 +423,7 @@ operand:
         $$.adr=tokens::Addressing::REGINDPOM;
         $$.ini=ini;
         $$.reg=$2;
+        drv.assembler.addToCounter(5); //5B instr
     }
 |   "[" REG "+" SYMBOL "]" {
         tokens::Initializer ini;
@@ -412,6 +433,7 @@ operand:
         $$.adr=tokens::Addressing::REGINDPOM;
         $$.ini=ini;
         $$.reg=$2;
+        drv.assembler.addToCounter(5); //5B instr
     }
 
 ;

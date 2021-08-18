@@ -1,5 +1,5 @@
- # include "tokens.h"
- # include "assembler.h"
+ # include "../h/tokens.h"
+ # include "../h/assembler.h"
 
 using namespace tokens;
 
@@ -8,9 +8,14 @@ using namespace tokens;
 //GLOBAL, EXTERN, SECTION, SKIP, WORD, EQU
  int Directive::secondPass(Assembler* asmb){
      switch(type){
-         case  DirType::GLOBAL: break;
+         case  DirType::GLOBAL: 
+            for(Initializer ini:symbols){
+                asmb->setGlobalSymbol(ini.name);
+            }
+            break;
          case  DirType::EXTERN: break;
-         case  DirType::SECTION: break;
+         case  DirType::SECTION: 
+            break;
          case  DirType::SKIP: break;
          case  DirType::WORD: break;
          case  DirType::EQU: break;

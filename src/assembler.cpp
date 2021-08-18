@@ -29,4 +29,9 @@ int Assembler::secondPass(){
         int i=l.exp->secondPass(this);
         if(i!=0)return i;
     }
+    return 0;
+}
+
+void Assembler::setGlobalSymbol(std::string name){
+    symbolTable.setGlobalSymbol(name);
 }

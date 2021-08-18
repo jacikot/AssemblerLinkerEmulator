@@ -60,3 +60,12 @@ void SymbolTable::addUndefinedSymbol(std::string name){
     smb->isSection=false;
     table->insert({name,smb});
 }
+
+void SymbolTable::setGlobalSymbol(std::string name){
+    if(table->find(name)==table->end()){
+        //handluje exception
+        return;
+    }
+    table->find(name)->second->global=true;
+
+}

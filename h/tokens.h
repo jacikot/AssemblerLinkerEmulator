@@ -66,27 +66,23 @@ namespace tokens{
             }
             std::string mnemonic;
             virtual int secondPass(Assembler * asmb)=0;
-            virtual InstructionType getType()=0;
     };
 
     class Instr0 : public Instruction{
         public:
             int secondPass(Assembler* asmb);
-            InstructionType getType();
     };
 
     class Instr1_op : public Instruction{
         public:
             Operand operand;
             int secondPass(Assembler* asmb);
-            InstructionType getType();
     };
 
     class Instr1_reg : public Instruction{
         public:
             std::string reg;
             int secondPass(Assembler* asmb);
-            InstructionType getType();
     };
 
     class Instr2_regreg : public Instruction{
@@ -94,7 +90,6 @@ namespace tokens{
             std::string regSRC;
             std::string regDST;
             int secondPass(Assembler* asmb);
-            InstructionType getType();
     };
 
     class Instr2_regop : public Instruction{
