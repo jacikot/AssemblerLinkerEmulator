@@ -69,3 +69,35 @@ void SymbolTable::setGlobalSymbol(std::string name){
     table->find(name)->second->global=true;
 
 }
+
+int SymbolTable::getSectionSize(std::string name){
+    if(table->find(name)==table->end()||!table->find(name)->second->isSection){
+        //handluje exception
+        return -1;
+    }
+    return table->find(name)->second->size;
+}
+
+int SymbolTable::getValue(std::string name){
+    if(table->find(name)==table->end()){
+        //handluje exception
+        return -1;
+    }
+    return table->find(name)->second->value;
+}
+
+bool SymbolTable::isGlobal(std::string name){
+    if(table->find(name)==table->end()){
+        //hendluj exception
+        return false;
+    }
+    return table->find(name)->second->global;
+}
+
+std::string SymbolTable::getSection(std::string name){
+    if(table->find(name)==table->end()){
+        //hendluj exception
+        return false;
+    }
+    return table->find(name)->second->section;
+}

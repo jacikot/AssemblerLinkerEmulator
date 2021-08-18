@@ -251,12 +251,25 @@ instruction:
         $$=inst;
     }
 |   MNM1REG REG {
-        tokens::Instr1_reg*inst=new tokens::Instr1_reg();
-        inst->mnemonic=$1;
-        inst->reg=$2;
-        $$=inst;
-        if(inst->mnemonic=="push"||inst->mnemonic=="pop") drv.assembler.addToCounter(3); //3B instr ldr i str
-        else drv.assembler.addToCounter(2); //2B
+        if($1=="push"||$1=="pop"){
+            tokens::Instr2_regop*inst=new tokens::Instr2_regop();
+            inst->mnemonic=$1;
+            inst->reg=$2;
+            tokens::Operand op;
+            op.adr=tokens::Addressing::REGIND;
+            op.reg="sp";
+            op.isSP=true;
+            inst->operand=op; 
+            drv.assembler.addToCounter(3);
+            $$=inst;
+        }
+        else{
+            tokens::Instr1_reg*inst=new tokens::Instr1_reg();
+            inst->mnemonic=$1;
+            inst->reg=$2;
+            $$=inst;
+            drv.assembler.addToCounter(2);
+        }
     }
 |   MNM2REGOP REG "," operand {
         tokens::Instr2_regop*inst=new tokens::Instr2_regop();
@@ -299,8 +312,10 @@ operand_jmp:
         ini.symbol=true;
         ini.name=$2;
         $$=tokens::Operand();
-        $$.adr=tokens::Addressing::PCREL;
+        $$.adr=tokens::Addressing::REGDIRPOM; //value not from memory pcrel - regdirpom
         $$.ini=ini;
+        $$.reg="pc";
+        $$.isPCREL=true;
         drv.assembler.addToCounter(5); //5B instr
     }
 |   "*" literal {
@@ -381,8 +396,10 @@ operand:
         ini.symbol=true;
         ini.name=$2;
         $$=tokens::Operand();
-        $$.adr=tokens::Addressing::PCREL;
+        $$.adr=tokens::Addressing::REGINDPOM; //value from memory pcrel - regindpom
         $$.ini=ini;
+        $$.reg="pc";
+        $$.isPCREL=true;
         drv.assembler.addToCounter(5); //5B instr
     }
 |   literal {

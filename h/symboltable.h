@@ -46,6 +46,15 @@ class SymbolTable{
         void addAbsoluteSymbol(std::string name, int value);
 
         void addUndefinedSymbol(std::string name);
+
+        int getSectionSize(std::string name);
+
+        int getValue(std::string name);
+
+        bool isGlobal(std::string name);
+
+        std::string getSection(std::string name);
+
         ~SymbolTable(){
             delete table;
         }

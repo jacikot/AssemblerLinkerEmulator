@@ -20,7 +20,7 @@ id    [a-zA-Z][a-zA-Z_0-9]*
 int   [0-9]+
 hex_int 0[xX][0-9a-fA-F]+
 blank [ \t\r]
-register r[0-7]
+register (r[0-7]|pc|sp|psw)
 comment #[^\n]*
 
 mnm0 (halt|iret|ret)

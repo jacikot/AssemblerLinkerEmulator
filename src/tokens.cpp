@@ -15,9 +15,21 @@ using namespace tokens;
             break;
          case  DirType::EXTERN: break;
          case  DirType::SECTION: 
+            asmb->setNewSection(symbols.front().name);
             break;
-         case  DirType::SKIP: break;
-         case  DirType::WORD: break;
+         case  DirType::SKIP: 
+            asmb->skip(symbols.front().value);
+            break;
+         case  DirType::WORD: 
+            for(Initializer ini:symbols){
+                if(ini.symbol){
+                    asmb->initSymbol(ini.name);
+                }
+                else{
+                    asmb->initLiteral(ini.value);
+                }
+            }
+         break;
          case  DirType::EQU: break;
      }
      return 0;
@@ -25,59 +37,24 @@ using namespace tokens;
 
 
  int Instr0::secondPass(Assembler* asmb){
-     switch (mnmMap.find(mnemonic)->second)
-     {
-        case InstructionType::HALT: break;
-        case InstructionType::IRET: break;
-        case InstructionType::RET: break;
-     }
+     asmb->initInstr0(mnmMap.find(mnemonic)->second);
      return 0;
  }
+ 
  int Instr1_op::secondPass(Assembler* asmb){
-     switch (mnmMap.find(mnemonic)->second)
-     {
-        case InstructionType::CALL: break;
-        case InstructionType::JMP: break;
-        case InstructionType::JEQ: break;
-        case InstructionType::JNE: break;
-        case InstructionType::JGT: break;
-     }
+     asmb->initInstr2REGOP(mnmMap.find(mnemonic)->second,"UND",operand);
      return 0;
  }
  int Instr1_reg::secondPass(Assembler* asmb){
-     switch (mnmMap.find(mnemonic)->second)
-     {
-        case InstructionType::PUSH: break;
-        case InstructionType::POP: break;
-        case InstructionType::NOT: break;
-        case InstructionType::INT: break;
-     }
+     asmb->initInstr2REGREG(mnmMap.find(mnemonic)->second,reg,"UND"); //src reg is not used
      return 0;
  }
  int Instr2_regreg::secondPass(Assembler* asmb){
-     switch (mnmMap.find(mnemonic)->second)
-     {
-        case InstructionType::XCHG: break;
-        case InstructionType::ADD: break;
-        case InstructionType::SUB: break;
-        case InstructionType::MUL: break;
-        case InstructionType::DIV: break;
-        case InstructionType::CMP: break;
-        case InstructionType::AND: break;
-        case InstructionType::OR: break;
-        case InstructionType::XOR: break;
-        case InstructionType::TEST: break;
-        case InstructionType::SHL: break;
-        case InstructionType::SHR: break;
-     }
+     asmb->initInstr2REGREG(mnmMap.find(mnemonic)->second,regDST,regSRC); 
      return 0;
  }
  int Instr2_regop::secondPass(Assembler* asmb){
-     switch (mnmMap.find(mnemonic)->second)
-     {
-        case InstructionType::LDR: break;
-        case InstructionType::STR: break;
-     }
+     asmb->initInstr2REGOP(mnmMap.find(mnemonic)->second,reg,operand);
      return 0;
  }
 
