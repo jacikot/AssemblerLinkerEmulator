@@ -30,7 +30,7 @@ namespace tokens{
             Initializer ini;
             std::string reg;
             bool isPCREL=false;
-            bool isSP=false;
+            int addend=0;
     };
 
     class Line{

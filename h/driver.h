@@ -20,6 +20,7 @@ class Driver
     Driver ();
     
     Assembler assembler;
+    std::string outfile;
 
     int result;
     // Run the parser on file F.  Return 0 on success.

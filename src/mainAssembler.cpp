@@ -1,21 +1,27 @@
 # include "../h/driver.h"
 # include <iostream> 
+# include <regex>
+# include <string> 
 
 int main (int argc, char *argv[])
 {
   int res = 0;
   Driver drv;
-  for (int i = 1; i < argc; ++i)
-    if (argv[i] == std::string ("-p"))
-      drv.trace_parsing = true;
-    else if (argv[i] == std::string ("-s"))
-      drv.trace_scanning = true;
-    else if (!drv.parse (argv[i]))
+  if(argc<=1)return -1;
+  drv.file=argv[1];
+  std::regex reg("^([^.]*)\.[^.]$");
+  std::smatch sm;
+  bool f=std::regex_match(drv.file,sm,reg);
+  if(!f) return -1;
+  if (argc>2&&argv[1] == std::string ("-o"))
+      drv.outfile=argv[2];
+  else drv.outfile=sm[1];
+  if (!drv.parse (drv.file))
       std::cout << drv.result << '\n';
-    else
-      res = 1;
-  
-  int ret=drv.assembler.secondPass();
+  else return -1;
+  res=drv.assembler.secondPass();
+
+  //print to file
   return res;
 }
 

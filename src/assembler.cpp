@@ -93,7 +93,7 @@ void Assembler::initInstr0(int opcode){
 }
 
 
-int getRegNo(std::string reg){
+int Assembler::getRegNo(std::string reg){
     if(reg=="r0")return 0b0000;
     if(reg=="r1")return 0b0001;
     if(reg=="r2")return 0b0010;
@@ -195,7 +195,7 @@ void Assembler::initPcRel(std::string name){
 }
 
 
- void Assembler::initInstr2REGREG(int opcode, std::string dst, std::string src){
+void Assembler::initInstr2REGREG(int opcode, std::string dst, std::string src){
     if(curSection==""){
          //handle error
          return;
@@ -204,16 +204,13 @@ void Assembler::initPcRel(std::string name){
     sections.init1(curSection,(getRegNo(dst)<<4)&getRegNo(src),counter);
     counter++;
 
- }
+}
 
- void Assembler::initInstr2REGOP(int opcode,std::string reg,tokens::Operand op){
+void Assembler::initInstr2REGOP(int opcode,std::string reg,tokens::Operand op){
     if(curSection==""){
          //handle error
          return;
     }
-    int addend=0b0000;
-    if(op.isSP&&opcode==tokens::InstructionType::PUSH) addend=0b0001;
-    if(op.isSP&&opcode==tokens::InstructionType::POP) addend=0b0100;
     initInstr0(opcode);//1. B
-    initOperand(op,reg,addend);
- }
+    initOperand(op,reg,op.addend);
+}

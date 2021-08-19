@@ -47,6 +47,7 @@ class Assembler{
 
         void initPcRel(std::string name);
     private:
+        int getRegNo(std::string reg);
         std::vector<tokens::Line>lines;
         SymbolTable symbolTable;
         SectionMapper sections;

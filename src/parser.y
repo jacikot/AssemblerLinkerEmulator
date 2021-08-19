@@ -92,15 +92,13 @@ lines:
 |   lines line {
         drv.assembler.addLine($2);
     }
+|   lines COMMENT {}
 ;
 
 //!!!! labela na kraju svega?
 line:
     %empty {}
 |   label line {
-        $$=$2;
-    }
-|   COMMENT line {
         $$=$2;
     }
 |   expression {
@@ -258,7 +256,8 @@ instruction:
             tokens::Operand op;
             op.adr=tokens::Addressing::REGIND;
             op.reg="sp";
-            op.isSP=true;
+            if($1=="push")op.addend=0b0001;
+            else op.addend=0b0100;
             inst->operand=op; 
             drv.assembler.addToCounter(3);
             $$=inst;

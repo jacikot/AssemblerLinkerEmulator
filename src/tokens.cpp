@@ -6,7 +6,7 @@ using namespace tokens;
 
 
 //GLOBAL, EXTERN, SECTION, SKIP, WORD, EQU
- int Directive::secondPass(Assembler* asmb){
+int Directive::secondPass(Assembler* asmb){
      switch(type){
          case  DirType::GLOBAL: 
             for(Initializer ini:symbols){
@@ -33,26 +33,26 @@ using namespace tokens;
          case  DirType::EQU: break;
      }
      return 0;
- }
+}
 
 
- int Instr0::secondPass(Assembler* asmb){
+int Instr0::secondPass(Assembler* asmb){
      asmb->initInstr0(mnmMap.find(mnemonic)->second);
      return 0;
- }
+}
  
- int Instr1_op::secondPass(Assembler* asmb){
+int Instr1_op::secondPass(Assembler* asmb){
      asmb->initInstr2REGOP(mnmMap.find(mnemonic)->second,"UND",operand);
      return 0;
- }
- int Instr1_reg::secondPass(Assembler* asmb){
+}
+int Instr1_reg::secondPass(Assembler* asmb){
      asmb->initInstr2REGREG(mnmMap.find(mnemonic)->second,reg,"UND"); //src reg is not used
      return 0;
- }
- int Instr2_regreg::secondPass(Assembler* asmb){
+}
+int Instr2_regreg::secondPass(Assembler* asmb){
      asmb->initInstr2REGREG(mnmMap.find(mnemonic)->second,regDST,regSRC); 
      return 0;
- }
+}
  int Instr2_regop::secondPass(Assembler* asmb){
      asmb->initInstr2REGOP(mnmMap.find(mnemonic)->second,reg,operand);
      return 0;
