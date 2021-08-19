@@ -3,7 +3,7 @@
 # include <string>
 # include <map>
 # include <vector>
-# include "parser.h"
+# include "../build/parser.h"
 # include "symboltable.h" 
 # include "assembler.h" 
 

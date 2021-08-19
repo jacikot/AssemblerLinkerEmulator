@@ -65,9 +65,6 @@ mnm2_regop (ldr|str)
 ".end"     return yy::parser::make_YYEOF  (loc);
 
 {register} return yy::parser::make_REG    (yytext,loc);
-"pc"       return yy::parser::make_REG_PC (loc);
-"sp"       return yy::parser::make_REG_SP (loc);
-"psw"      return yy::parser::make_REG_PSW(loc);
 
 {mnm0}        return yy::parser::make_MNM0(yytext,loc);
 {mnm1_op}     return yy::parser::make_MNM1OP(yytext,loc);

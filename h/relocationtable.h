@@ -1,3 +1,6 @@
+#ifndef RELOC
+#define RELOC
+
 # include <string>
 # include <vector>
 
@@ -32,3 +35,5 @@ class RelocationTable{
     private:
         std::vector<RelocationRecord> records;
 };
+
+#endif

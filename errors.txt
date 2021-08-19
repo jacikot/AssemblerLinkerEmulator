@@ -1,128 +1,80 @@
+In file included from src/../h/assembler.h:9,
+                 from src/assembler.cpp:1:
+src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+In file included from src/../h/assembler.h:9,
+                 from src/../h/driver.h:8,
+                 from src/driver.cpp:1:
+src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+In file included from src/../h/assembler.h:9,
+                 from src/../h/driver.h:8,
+                 from src/mainAssembler.cpp:1:
+src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
 src/mainAssembler.cpp: In function ‘int main(int, char**)’:
-src/mainAssembler.cpp:18:7: warning: unused variable ‘ret’ [-Wunused-variable]
-   18 |   int ret=drv.assembler.secondPass();
-      |       ^~~
-src/tokens.cpp: In member function ‘virtual int tokens::Instr0::secondPass(Assembler*)’:
-src/tokens.cpp:28:13: warning: enumeration value ‘INT’ not handled in switch [-Wswitch]
-   28 |      switch (mnmMap.find(mnemonic)->second)
-      |             ^
-src/tokens.cpp:28:13: warning: enumeration value ‘CALL’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘JMP’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘JEQ’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘JNE’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘JGT’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘PUSH’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘POP’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘XCHG’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘ADD’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘SUB’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘MUL’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘DIV’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘CMP’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘NOT’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘AND’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘OR’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘XOR’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘TEST’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘SHL’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘SHR’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘LDR’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘STR’ not handled in switch [-Wswitch]
-src/tokens.cpp:28:13: warning: enumeration value ‘ERROR’ not handled in switch [-Wswitch]
-src/tokens.cpp: In member function ‘virtual int tokens::Instr1_op::secondPass(Assembler*)’:
-src/tokens.cpp:37:13: warning: enumeration value ‘HALT’ not handled in switch [-Wswitch]
-   37 |      switch (mnmMap.find(mnemonic)->second)
-      |             ^
-src/tokens.cpp:37:13: warning: enumeration value ‘INT’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘IRET’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘RET’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘PUSH’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘POP’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘XCHG’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘ADD’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘SUB’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘MUL’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘DIV’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘CMP’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘NOT’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘AND’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘OR’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘XOR’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘TEST’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘SHL’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘SHR’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘LDR’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘STR’ not handled in switch [-Wswitch]
-src/tokens.cpp:37:13: warning: enumeration value ‘ERROR’ not handled in switch [-Wswitch]
-src/tokens.cpp: In member function ‘virtual int tokens::Instr1_reg::secondPass(Assembler*)’:
-src/tokens.cpp:48:13: warning: enumeration value ‘HALT’ not handled in switch [-Wswitch]
-   48 |      switch (mnmMap.find(mnemonic)->second)
-      |             ^
-src/tokens.cpp:48:13: warning: enumeration value ‘IRET’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘CALL’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘RET’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘JMP’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘JEQ’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘JNE’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘JGT’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘XCHG’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘ADD’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘SUB’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘MUL’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘DIV’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘CMP’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘AND’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘OR’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘XOR’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘TEST’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘SHL’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘SHR’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘LDR’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘STR’ not handled in switch [-Wswitch]
-src/tokens.cpp:48:13: warning: enumeration value ‘ERROR’ not handled in switch [-Wswitch]
-src/tokens.cpp: In member function ‘virtual int tokens::Instr2_regreg::secondPass(Assembler*)’:
-src/tokens.cpp:58:13: warning: enumeration value ‘HALT’ not handled in switch [-Wswitch]
-   58 |      switch (mnmMap.find(mnemonic)->second)
-      |             ^
-src/tokens.cpp:58:13: warning: enumeration value ‘INT’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘IRET’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘CALL’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘RET’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘JMP’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘JEQ’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘JNE’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘JGT’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘PUSH’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘POP’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘NOT’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘LDR’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘STR’ not handled in switch [-Wswitch]
-src/tokens.cpp:58:13: warning: enumeration value ‘ERROR’ not handled in switch [-Wswitch]
-src/tokens.cpp: In member function ‘virtual int tokens::Instr2_regop::secondPass(Assembler*)’:
-src/tokens.cpp:76:13: warning: enumeration value ‘HALT’ not handled in switch [-Wswitch]
-   76 |      switch (mnmMap.find(mnemonic)->second)
-      |             ^
-src/tokens.cpp:76:13: warning: enumeration value ‘INT’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘IRET’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘CALL’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘RET’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘JMP’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘JEQ’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘JNE’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘JGT’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘PUSH’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘POP’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘XCHG’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘ADD’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘SUB’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘MUL’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘DIV’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘CMP’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘NOT’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘AND’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘OR’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘XOR’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘TEST’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘SHL’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘SHR’ not handled in switch [-Wswitch]
-src/tokens.cpp:76:13: warning: enumeration value ‘ERROR’ not handled in switch [-Wswitch]
+src/mainAssembler.cpp:12:18: warning: unknown escape sequence: '\.'
+   12 |   std::regex reg("^([^.]*)\.[^.]$");
+      |                  ^~~~~~~~~~~~~~~~~
+In file included from src/../h/assembler.h:9,
+                 from src/tokens.cpp:2:
+src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+In file included from build/../h/assembler.h:9,
+                 from build/../h/driver.h:8,
+                 from ../src/parser.y:20:
+build/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+build/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+build/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+build/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+In file included from build/../h/assembler.h:9,
+                 from build/../h/driver.h:8,
+                 from ../src/scanner.l:7:
+build/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+build/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+build/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+build/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~

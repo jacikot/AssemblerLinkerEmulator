@@ -48,9 +48,6 @@
   WORD    
   SKIP    
   EQU     
-  REG_PC  "pc"
-  REG_SP  "sp"
-  REG_PSW "psw"
   YYEOF 0
 ;
 

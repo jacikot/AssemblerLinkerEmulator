@@ -1,3 +1,6 @@
+# ifndef SECTIONS
+# define SECTIONS
+
 # include <map>
 # include <string>
 class SectionMapper{
@@ -15,3 +18,5 @@ class SectionMapper{
     private:
         std::map<std::string,char*> content;
 };
+
+# endif

@@ -466,19 +466,16 @@ namespace yy {
         TOK_WORD = 19,
         TOK_SKIP = 20,
         TOK_EQU = 21,
-        TOK_REG_PC = 22,
-        TOK_REG_SP = 23,
-        TOK_REG_PSW = 24,
-        TOK_REG = 25,
-        TOK_SYMBOL = 26,
-        TOK_NUMBER = 27,
-        TOK_HEX = 28,
-        TOK_MNM0 = 29,
-        TOK_MNM1OP = 30,
-        TOK_MNM1REG = 31,
-        TOK_MNM2REGOP = 32,
-        TOK_MNM2REGREG = 33,
-        TOK_COMMENT = 34
+        TOK_REG = 22,
+        TOK_SYMBOL = 23,
+        TOK_NUMBER = 24,
+        TOK_HEX = 25,
+        TOK_MNM0 = 26,
+        TOK_MNM1OP = 27,
+        TOK_MNM1REG = 28,
+        TOK_MNM2REGOP = 29,
+        TOK_MNM2REGREG = 30,
+        TOK_COMMENT = 31
       };
     };
 
@@ -659,48 +656,48 @@ namespace yy {
         // Type destructor.
 switch (yytype)
     {
-      case 27: // NUMBER
-      case 28: // HEX
-      case 44: // literal
+      case 24: // NUMBER
+      case 25: // HEX
+      case 41: // literal
         value.template destroy< int > ();
         break;
 
-      case 25: // REG
-      case 26: // SYMBOL
-      case 29: // MNM0
-      case 30: // MNM1OP
-      case 31: // MNM1REG
-      case 32: // MNM2REGOP
-      case 33: // MNM2REGREG
-      case 34: // COMMENT
-      case 37: // lines
-      case 39: // label
+      case 22: // REG
+      case 23: // SYMBOL
+      case 26: // MNM0
+      case 27: // MNM1OP
+      case 28: // MNM1REG
+      case 29: // MNM2REGOP
+      case 30: // MNM2REGREG
+      case 31: // COMMENT
+      case 34: // lines
+      case 36: // label
         value.template destroy< std::string > ();
         break;
 
-      case 42: // symbols
-      case 43: // initializers
+      case 39: // symbols
+      case 40: // initializers
         value.template destroy< std::vector<tokens::Initializer> > ();
         break;
 
-      case 41: // directive
+      case 38: // directive
         value.template destroy< tokens::Directive* > ();
         break;
 
-      case 40: // expression
+      case 37: // expression
         value.template destroy< tokens::Expression* > ();
         break;
 
-      case 45: // instruction
+      case 42: // instruction
         value.template destroy< tokens::Instruction* > ();
         break;
 
-      case 38: // line
+      case 35: // line
         value.template destroy< tokens::Line > ();
         break;
 
-      case 46: // operand_jmp
-      case 47: // operand
+      case 43: // operand_jmp
+      case 44: // operand
         value.template destroy< tokens::Operand > ();
         break;
 
@@ -780,13 +777,13 @@ switch (yytype)
       symbol_type (int tok, location_type l)
         : super_type(token_type (tok), std::move (l))
       {
-        YY_ASSERT (tok == token::TOK_YYEOF || tok == token::TOK_MINUS || tok == token::TOK_PLUS || tok == token::TOK_STAR || tok == token::TOK_SLASH || tok == token::TOK_LPAREN || tok == token::TOK_RPAREN || tok == token::TOK_LBRACK || tok == token::TOK_RBRACK || tok == token::TOK_COMMA || tok == token::TOK_COLON || tok == token::TOK_DOLLAR || tok == token::TOK_HASH || tok == token::TOK_PERCENT || tok == token::TOK_GLOBAL || tok == token::TOK_EXTERN || tok == token::TOK_SECTION || tok == token::TOK_WORD || tok == token::TOK_SKIP || tok == token::TOK_EQU || tok == token::TOK_REG_PC || tok == token::TOK_REG_SP || tok == token::TOK_REG_PSW);
+        YY_ASSERT (tok == token::TOK_YYEOF || tok == token::TOK_MINUS || tok == token::TOK_PLUS || tok == token::TOK_STAR || tok == token::TOK_SLASH || tok == token::TOK_LPAREN || tok == token::TOK_RPAREN || tok == token::TOK_LBRACK || tok == token::TOK_RBRACK || tok == token::TOK_COMMA || tok == token::TOK_COLON || tok == token::TOK_DOLLAR || tok == token::TOK_HASH || tok == token::TOK_PERCENT || tok == token::TOK_GLOBAL || tok == token::TOK_EXTERN || tok == token::TOK_SECTION || tok == token::TOK_WORD || tok == token::TOK_SKIP || tok == token::TOK_EQU);
       }
 #else
       symbol_type (int tok, const location_type& l)
         : super_type(token_type (tok), l)
       {
-        YY_ASSERT (tok == token::TOK_YYEOF || tok == token::TOK_MINUS || tok == token::TOK_PLUS || tok == token::TOK_STAR || tok == token::TOK_SLASH || tok == token::TOK_LPAREN || tok == token::TOK_RPAREN || tok == token::TOK_LBRACK || tok == token::TOK_RBRACK || tok == token::TOK_COMMA || tok == token::TOK_COLON || tok == token::TOK_DOLLAR || tok == token::TOK_HASH || tok == token::TOK_PERCENT || tok == token::TOK_GLOBAL || tok == token::TOK_EXTERN || tok == token::TOK_SECTION || tok == token::TOK_WORD || tok == token::TOK_SKIP || tok == token::TOK_EQU || tok == token::TOK_REG_PC || tok == token::TOK_REG_SP || tok == token::TOK_REG_PSW);
+        YY_ASSERT (tok == token::TOK_YYEOF || tok == token::TOK_MINUS || tok == token::TOK_PLUS || tok == token::TOK_STAR || tok == token::TOK_SLASH || tok == token::TOK_LPAREN || tok == token::TOK_RPAREN || tok == token::TOK_LBRACK || tok == token::TOK_RBRACK || tok == token::TOK_COMMA || tok == token::TOK_COLON || tok == token::TOK_DOLLAR || tok == token::TOK_HASH || tok == token::TOK_PERCENT || tok == token::TOK_GLOBAL || tok == token::TOK_EXTERN || tok == token::TOK_SECTION || tok == token::TOK_WORD || tok == token::TOK_SKIP || tok == token::TOK_EQU);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -1150,51 +1147,6 @@ switch (yytype)
       make_EQU (const location_type& l)
       {
         return symbol_type (token::TOK_EQU, l);
-      }
-#endif
-#if 201103L <= YY_CPLUSPLUS
-      static
-      symbol_type
-      make_REG_PC (location_type l)
-      {
-        return symbol_type (token::TOK_REG_PC, std::move (l));
-      }
-#else
-      static
-      symbol_type
-      make_REG_PC (const location_type& l)
-      {
-        return symbol_type (token::TOK_REG_PC, l);
-      }
-#endif
-#if 201103L <= YY_CPLUSPLUS
-      static
-      symbol_type
-      make_REG_SP (location_type l)
-      {
-        return symbol_type (token::TOK_REG_SP, std::move (l));
-      }
-#else
-      static
-      symbol_type
-      make_REG_SP (const location_type& l)
-      {
-        return symbol_type (token::TOK_REG_SP, l);
-      }
-#endif
-#if 201103L <= YY_CPLUSPLUS
-      static
-      symbol_type
-      make_REG_PSW (location_type l)
-      {
-        return symbol_type (token::TOK_REG_PSW, std::move (l));
-      }
-#else
-      static
-      symbol_type
-      make_REG_PSW (const location_type& l)
-      {
-        return symbol_type (token::TOK_REG_PSW, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -1653,10 +1605,10 @@ switch (yytype)
     enum
     {
       yyeof_ = 0,
-      yylast_ = 96,     ///< Last index in yytable_.
+      yylast_ = 107,     ///< Last index in yytable_.
       yynnts_ = 13,  ///< Number of nonterminal symbols.
       yyfinal_ = 3, ///< Termination state number.
-      yyntokens_ = 35  ///< Number of tokens.
+      yyntokens_ = 32  ///< Number of tokens.
     };
 
 
@@ -1681,48 +1633,48 @@ switch (yytype)
   {
     switch (this->type_get ())
     {
-      case 27: // NUMBER
-      case 28: // HEX
-      case 44: // literal
+      case 24: // NUMBER
+      case 25: // HEX
+      case 41: // literal
         value.move< int > (std::move (that.value));
         break;
 
-      case 25: // REG
-      case 26: // SYMBOL
-      case 29: // MNM0
-      case 30: // MNM1OP
-      case 31: // MNM1REG
-      case 32: // MNM2REGOP
-      case 33: // MNM2REGREG
-      case 34: // COMMENT
-      case 37: // lines
-      case 39: // label
+      case 22: // REG
+      case 23: // SYMBOL
+      case 26: // MNM0
+      case 27: // MNM1OP
+      case 28: // MNM1REG
+      case 29: // MNM2REGOP
+      case 30: // MNM2REGREG
+      case 31: // COMMENT
+      case 34: // lines
+      case 36: // label
         value.move< std::string > (std::move (that.value));
         break;
 
-      case 42: // symbols
-      case 43: // initializers
+      case 39: // symbols
+      case 40: // initializers
         value.move< std::vector<tokens::Initializer> > (std::move (that.value));
         break;
 
-      case 41: // directive
+      case 38: // directive
         value.move< tokens::Directive* > (std::move (that.value));
         break;
 
-      case 40: // expression
+      case 37: // expression
         value.move< tokens::Expression* > (std::move (that.value));
         break;
 
-      case 45: // instruction
+      case 42: // instruction
         value.move< tokens::Instruction* > (std::move (that.value));
         break;
 
-      case 38: // line
+      case 35: // line
         value.move< tokens::Line > (std::move (that.value));
         break;
 
-      case 46: // operand_jmp
-      case 47: // operand
+      case 43: // operand_jmp
+      case 44: // operand
         value.move< tokens::Operand > (std::move (that.value));
         break;
 
@@ -1741,48 +1693,48 @@ switch (yytype)
   {
     switch (this->type_get ())
     {
-      case 27: // NUMBER
-      case 28: // HEX
-      case 44: // literal
+      case 24: // NUMBER
+      case 25: // HEX
+      case 41: // literal
         value.copy< int > (YY_MOVE (that.value));
         break;
 
-      case 25: // REG
-      case 26: // SYMBOL
-      case 29: // MNM0
-      case 30: // MNM1OP
-      case 31: // MNM1REG
-      case 32: // MNM2REGOP
-      case 33: // MNM2REGREG
-      case 34: // COMMENT
-      case 37: // lines
-      case 39: // label
+      case 22: // REG
+      case 23: // SYMBOL
+      case 26: // MNM0
+      case 27: // MNM1OP
+      case 28: // MNM1REG
+      case 29: // MNM2REGOP
+      case 30: // MNM2REGREG
+      case 31: // COMMENT
+      case 34: // lines
+      case 36: // label
         value.copy< std::string > (YY_MOVE (that.value));
         break;
 
-      case 42: // symbols
-      case 43: // initializers
+      case 39: // symbols
+      case 40: // initializers
         value.copy< std::vector<tokens::Initializer> > (YY_MOVE (that.value));
         break;
 
-      case 41: // directive
+      case 38: // directive
         value.copy< tokens::Directive* > (YY_MOVE (that.value));
         break;
 
-      case 40: // expression
+      case 37: // expression
         value.copy< tokens::Expression* > (YY_MOVE (that.value));
         break;
 
-      case 45: // instruction
+      case 42: // instruction
         value.copy< tokens::Instruction* > (YY_MOVE (that.value));
         break;
 
-      case 38: // line
+      case 35: // line
         value.copy< tokens::Line > (YY_MOVE (that.value));
         break;
 
-      case 46: // operand_jmp
-      case 47: // operand
+      case 43: // operand_jmp
+      case 44: // operand
         value.copy< tokens::Operand > (YY_MOVE (that.value));
         break;
 
@@ -1808,48 +1760,48 @@ switch (yytype)
     super_type::move (s);
     switch (this->type_get ())
     {
-      case 27: // NUMBER
-      case 28: // HEX
-      case 44: // literal
+      case 24: // NUMBER
+      case 25: // HEX
+      case 41: // literal
         value.move< int > (YY_MOVE (s.value));
         break;
 
-      case 25: // REG
-      case 26: // SYMBOL
-      case 29: // MNM0
-      case 30: // MNM1OP
-      case 31: // MNM1REG
-      case 32: // MNM2REGOP
-      case 33: // MNM2REGREG
-      case 34: // COMMENT
-      case 37: // lines
-      case 39: // label
+      case 22: // REG
+      case 23: // SYMBOL
+      case 26: // MNM0
+      case 27: // MNM1OP
+      case 28: // MNM1REG
+      case 29: // MNM2REGOP
+      case 30: // MNM2REGREG
+      case 31: // COMMENT
+      case 34: // lines
+      case 36: // label
         value.move< std::string > (YY_MOVE (s.value));
         break;
 
-      case 42: // symbols
-      case 43: // initializers
+      case 39: // symbols
+      case 40: // initializers
         value.move< std::vector<tokens::Initializer> > (YY_MOVE (s.value));
         break;
 
-      case 41: // directive
+      case 38: // directive
         value.move< tokens::Directive* > (YY_MOVE (s.value));
         break;
 
-      case 40: // expression
+      case 37: // expression
         value.move< tokens::Expression* > (YY_MOVE (s.value));
         break;
 
-      case 45: // instruction
+      case 42: // instruction
         value.move< tokens::Instruction* > (YY_MOVE (s.value));
         break;
 
-      case 38: // line
+      case 35: // line
         value.move< tokens::Line > (YY_MOVE (s.value));
         break;
 
-      case 46: // operand_jmp
-      case 47: // operand
+      case 43: // operand_jmp
+      case 44: // operand
         value.move< tokens::Operand > (YY_MOVE (s.value));
         break;
 
@@ -1908,7 +1860,7 @@ switch (yytype)
   }
 
 } // yy
-#line 1912 "parser.h"
+#line 1864 "parser.h"
 
 
 

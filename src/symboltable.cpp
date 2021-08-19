@@ -97,7 +97,7 @@ bool SymbolTable::isGlobal(std::string name){
 std::string SymbolTable::getSection(std::string name){
     if(table->find(name)==table->end()){
         //hendluj exception
-        return false;
+        return "";
     }
     return table->find(name)->second->section;
 }
