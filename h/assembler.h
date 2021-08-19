@@ -17,9 +17,7 @@ class Assembler{
 
         void addLine(tokens::Line line);
 
-        void addToCounter(int size){
-            counter+=size;
-        }
+        void addToCounter(int size);
 
         void setNewSection(std::string name);
 

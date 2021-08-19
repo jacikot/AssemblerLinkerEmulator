@@ -35,6 +35,8 @@ class SymbolTable{
             table=new std::map<std::string,SymbolsData*>();
         }
 
+        bool exists(std::string name);
+
         void addSymbol(std::string name, std::string section, int value);
 
         void addSection(std::string name);

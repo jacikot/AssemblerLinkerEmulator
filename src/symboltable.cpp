@@ -1,5 +1,12 @@
 # include "../h/symboltable.h"
 # include <vector>
+
+bool SymbolTable::exists(std::string name){
+    if(table->find(name)!=table->end()){
+        return true;
+    }
+    else return false;
+}
 void SymbolTable::addSymbol(std::string name, std::string section, int value){
     if(table->find(name)!=table->end()){
         //handluje exception

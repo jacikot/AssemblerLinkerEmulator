@@ -1,6 +1,15 @@
 #include "../h/assembler.h"
 #include "../h/tokens.h"
 
+void Assembler::addToCounter(int size){
+    if(curSection==""){
+         //handle error
+         return;
+    }
+    counter+=size;
+    symbolTable.setSectionSize(curSection,counter);
+}
+
 void Assembler::addLine(tokens::Line line){
     lines.push_back(line);
 }
@@ -11,7 +20,6 @@ void Assembler::addSymbol(std::string name){
 
 void Assembler::addSection(std::string name){
     symbolTable.addSection(name);
-    if(curSection!="")symbolTable.setSectionSize(curSection,counter);
     counter=0;
     curSection=name;
 }
@@ -70,15 +78,20 @@ void Assembler::initSymbol(std::string name){
          //handle error
          return;
     }
-    if(symbolTable.isGlobal(name)){
+    if(!symbolTable.exists(name)){
+        //handle error
+         return;
+    }
+    int offset=symbolTable.getValue(name);
+    std::string section=symbolTable.getSection(name);
+
+    if(symbolTable.isGlobal(name)&&(section!="ABS")){
         sections.skip(curSection,2,counter); //init 0
         relocations.addRecord(counter,RelocationType::R_386_16,name,curSection); //add record for symbol
     }
     else{
-        int offset=symbolTable.getValue(name);
-        std::string section=symbolTable.getSection(name);
         sections.init2(curSection,offset,counter); //init with offset
-        relocations.addRecord(counter,RelocationType::R_386_16,section,curSection); //add record for section
+        if(section!="ABS") relocations.addRecord(counter,RelocationType::R_386_16,section,curSection); //add record for section
     }
     counter+=2;
 }
@@ -113,7 +126,7 @@ void Assembler::initOperand(tokens::Operand op, std::string dst, int addend){
     switch (op.adr)
     {
     case tokens::Addressing::IMMED: 
-        sections.init1(curSection,getRegNo("UND")&(getRegNo(dst)<<4),counter); //2. B
+        sections.init1(curSection,getRegNo("UND")|(getRegNo(dst)<<4),counter); //2. B
         sections.init1(curSection,tokens::Addressing::IMMED,counter+1); //3. B
         counter+=2;
         if(op.ini.symbol){
@@ -124,17 +137,17 @@ void Assembler::initOperand(tokens::Operand op, std::string dst, int addend){
         }
         break;
     case tokens::Addressing::REGDIR: 
-        sections.init1(curSection,getRegNo(op.reg)&(getRegNo(dst)<<4),counter); //2. B
+        sections.init1(curSection,getRegNo(op.reg)|(getRegNo(dst)<<4),counter); //2. B
         sections.init1(curSection,tokens::Addressing::REGDIR,counter+1); //3. B
         counter+=2;
         break;
     case tokens::Addressing::REGIND:
-        sections.init1(curSection,getRegNo(op.reg)&(getRegNo(dst)<<4),counter); //2. B
-        sections.init1(curSection,tokens::Addressing::REGIND&addend<<4,counter+1); //3. B, addend is +-2 for push and pop, else 0
+        sections.init1(curSection,getRegNo(op.reg)|(getRegNo(dst)<<4),counter); //2. B
+        sections.init1(curSection,tokens::Addressing::REGIND|(addend<<4),counter+1); //3. B, addend is +-2 for push and pop, else 0
         counter+=2;
         break;
     case tokens::Addressing::REGINDPOM:
-        sections.init1(curSection,getRegNo(op.reg)&(getRegNo(dst)<<4),counter); //2. B
+        sections.init1(curSection,getRegNo(op.reg)|(getRegNo(dst)<<4),counter); //2. B
         sections.init1(curSection,tokens::Addressing::REGINDPOM,counter+1); //3. B
         counter+=2;
         if(op.isPCREL){
@@ -151,7 +164,7 @@ void Assembler::initOperand(tokens::Operand op, std::string dst, int addend){
         
         break;
     case tokens::Addressing::MEMDIR: 
-        sections.init1(curSection,getRegNo("UND")&(getRegNo(dst)<<4),counter); //2. B
+        sections.init1(curSection,getRegNo("UND")|(getRegNo(dst)<<4),counter); //2. B
         sections.init1(curSection,tokens::Addressing::MEMDIR,counter+1); //3. B
         counter+=2;
         if(op.ini.symbol){
@@ -162,7 +175,7 @@ void Assembler::initOperand(tokens::Operand op, std::string dst, int addend){
         }
         break;
     case tokens::Addressing::REGDIRPOM: 
-        sections.init1(curSection,getRegNo(op.reg)&(getRegNo(dst)<<4),counter); //2.B
+        sections.init1(curSection,getRegNo(op.reg)|(getRegNo(dst)<<4),counter); //2.B
         sections.init1(curSection,tokens::Addressing::REGDIRPOM,counter+1); //3. B
         counter+=2;
         initPcRel(op.ini.name);
@@ -176,14 +189,14 @@ void Assembler::initPcRel(std::string name){
          //handle error
          return;
     }
-    if(symbolTable.isGlobal(name)){
+    int offset=symbolTable.getValue(name);
+    std::string section=symbolTable.getSection(name);
+    if(symbolTable.isGlobal(name)&&(section!="ABS")){
         sections.init2(curSection,-2,counter);
         relocations.addRecord(counter,RelocationType::R_386_PC16,name,curSection); //add record for symbol
     }
     else{
-        int offset=symbolTable.getValue(name);
-        std::string section=symbolTable.getSection(name);
-        if(curSection==section){
+        if((curSection==section)||section=="ABS"){
             sections.init2(curSection,offset-counter-2,counter); //no record
         }
         else{
@@ -201,7 +214,7 @@ void Assembler::initInstr2REGREG(int opcode, std::string dst, std::string src){
          return;
     }
     initInstr0(opcode);//1. B
-    sections.init1(curSection,(getRegNo(dst)<<4)&getRegNo(src),counter);
+    sections.init1(curSection,(getRegNo(dst)<<4)|getRegNo(src),counter);
     counter++;
 
 }

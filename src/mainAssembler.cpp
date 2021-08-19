@@ -9,16 +9,14 @@ int main (int argc, char *argv[])
   Driver drv;
   if(argc<=1)return -1;
   drv.file=argv[1];
-  std::regex reg("^([^.]*)\.[^.]$");
+  std::regex reg("^([^.]*)\\.[^.]*$");
   std::smatch sm;
   bool f=std::regex_match(drv.file,sm,reg);
   if(!f) return -1;
   if (argc>2&&argv[1] == std::string ("-o"))
       drv.outfile=argv[2];
   else drv.outfile=sm[1];
-  if (!drv.parse (drv.file))
-      std::cout << drv.result << '\n';
-  else return -1;
+  if (drv.parse (drv.file)) return -1;
   res=drv.assembler.secondPass();
 
   //print to file
