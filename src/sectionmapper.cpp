@@ -22,3 +22,8 @@ void SectionMapper::init1(std::string name, int value, int from){
     char*data=(char*)&value;
     content.find(name)->second[from]=data[0];
 }
+
+
+char* SectionMapper::getSectionContent(std::string name){
+    return content.find(name)->second;
+}

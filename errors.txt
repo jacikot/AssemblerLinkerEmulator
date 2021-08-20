@@ -37,6 +37,18 @@ src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
    14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
       |         ^~~~~~~~~~~~~~~~
 In file included from src/../h/assembler.h:9,
+                 from src/outputgenerator.cpp:2:
+src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+In file included from src/../h/assembler.h:9,
                  from src/tokens.cpp:2:
 src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
 src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]

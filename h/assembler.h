@@ -7,6 +7,18 @@
 # include "tokens.h"
 # include "sectionmapper.h"
 # include "relocationtable.h"
+# include "outputgenerator.h"
+
+
+struct header{
+    int hsize; //header size
+    int shsize; //section header size
+    int sectioncnt; //number of sections
+    int srsize; //symbol record size
+    int symbolcnt; //number of symbols
+    int relsize; //reloc record size
+    int relcnt; //number of relocations
+};
 
 
 class Assembler{
@@ -44,14 +56,19 @@ class Assembler{
         void initOperand(tokens::Operand op, std::string dst, int addend);
 
         void initPcRel(std::string name);
+
+        int output(std::string filename);
     private:
         int getRegNo(std::string reg);
+        header getHeaderData();
         std::vector<tokens::Line>lines;
         SymbolTable symbolTable;
         SectionMapper sections;
         RelocationTable relocations;
+        OutputGenerator generator;
         int counter=0;
         std::string curSection="";
+        bool finished=false;
     
 };
 

@@ -1,5 +1,6 @@
 # include "../h/symboltable.h"
 # include <vector>
+# include <algorithm>
 
 bool SymbolTable::exists(std::string name){
     if(table->find(name)!=table->end()){
@@ -107,4 +108,41 @@ std::string SymbolTable::getSection(std::string name){
         return "";
     }
     return table->find(name)->second->section;
+}
+
+std::vector<SymbolsData> SymbolTable::getAllSections(){
+    std::vector<SymbolsData> data;
+    for(auto pair:*table){
+        if(pair.second->isSection){
+            data.push_back(*pair.second);
+        }
+    }
+    std::sort(data.begin(),data.end(),[](SymbolsData& d1, SymbolsData&d2){
+        return d2.name.compare(d1.name);
+    });
+    return data;
+}
+
+int SymbolTable::getNumOfSections(){
+    return std::count_if(table->begin(),table->end(),[](auto d){
+        return d.second->isSection;
+    });
+}
+
+std::vector<SymbolsData> SymbolTable::getAllSymbols(){
+    std::vector<SymbolsData> data;
+    std::for_each(table->begin(),table->end(),[&data](auto d){
+        if(!d.second->isSection &&d.second->global) data.push_back(*d.second);
+    });
+    std::sort(data.begin(),data.end(),[](SymbolsData& d1, SymbolsData&d2){
+        return d2.name.compare(d1.name);
+    });
+    return data;
+}
+
+
+int SymbolTable::getNumOfGlobalSymbols(){
+    return std::count_if(table->begin(),table->end(),[](auto d){
+        return !d.second->isSection  &&d.second->global;
+    });
 }

@@ -36,6 +36,7 @@ namespace tokens{
     class Line{
         public:
             Expression* exp;
+            std::string label;
     };
 
     enum DirType{

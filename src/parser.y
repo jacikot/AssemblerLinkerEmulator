@@ -94,9 +94,12 @@ lines:
 
 //!!!! labela na kraju svega?
 line:
-    %empty {}
+    %empty {
+        $$=tokens::Line();
+    }
 |   label line {
         $$=$2;
+        $$.label=$1;
     }
 |   expression {
         $$=tokens::Line();
@@ -107,6 +110,7 @@ line:
 label:
     SYMBOL ":" {
         drv.assembler.addSymbol($1);
+        $$=$1;
     }
 ;
 

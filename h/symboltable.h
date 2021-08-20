@@ -1,8 +1,9 @@
 #ifndef SYMBOLTABLE
 #define SYMBOLTABLE
 
-#include <string>
-#include <map>
+# include <string>
+# include <map>
+# include <vector>
 
 
 struct SymbolsData{
@@ -56,6 +57,14 @@ class SymbolTable{
         bool isGlobal(std::string name);
 
         std::string getSection(std::string name);
+
+        std::vector<SymbolsData> getAllSections();
+
+        int getNumOfSections();
+
+        std::vector<SymbolsData> getAllSymbols();
+
+        int getNumOfGlobalSymbols();
 
         ~SymbolTable(){
             delete table;

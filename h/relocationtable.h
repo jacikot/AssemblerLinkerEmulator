@@ -32,6 +32,15 @@ class RelocationTable{
         void addRecord(int offset,RelocationType type,std::string name, std::string section){
             records.push_back(RelocationRecord(offset,type,name,section));
         }
+
+        std::vector<RelocationRecord> getAllRecords(){
+            return records;
+        }
+
+        int getRecordCount(){
+            return records.size();
+        }
+
     private:
         std::vector<RelocationRecord> records;
 };

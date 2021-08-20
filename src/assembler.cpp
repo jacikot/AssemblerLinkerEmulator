@@ -1,6 +1,8 @@
 #include "../h/assembler.h"
 #include "../h/tokens.h"
 
+# include <iostream>
+
 void Assembler::addToCounter(int size){
     if(curSection==""){
          //handle error
@@ -33,10 +35,11 @@ void Assembler::addUndefinedSymbol(std::string name){
 }
 
 int Assembler::secondPass(){
-    for(tokens::Line l:lines){
+    for(tokens::Line& l:lines){
         int i=l.exp->secondPass(this);
         if(i!=0)return i;
     }
+    finished=true;
     return 0;
 }
 
@@ -226,4 +229,24 @@ void Assembler::initInstr2REGOP(int opcode,std::string reg,tokens::Operand op){
     }
     initInstr0(opcode);//1. B
     initOperand(op,reg,op.addend);
+}
+
+int Assembler::output(std::string filename){
+    generator.openFile(filename);
+    header h=getHeaderData();
+    generator.printHeader(h);
+    generator.printSections(&symbolTable);
+    generator.printSymbols(&symbolTable);
+    generator.printRelocs(&relocations);
+    generator.printSectionContent(&sections,&symbolTable);
+    generator.closeFile();
+    return 0;
+}
+
+header Assembler::getHeaderData(){
+    header h;
+    h.symbolcnt=symbolTable.getNumOfGlobalSymbols();
+    h.sectioncnt=symbolTable.getNumOfSections();
+    h.relcnt=relocations.getRecordCount();
+    return h;
 }

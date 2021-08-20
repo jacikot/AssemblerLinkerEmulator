@@ -15,6 +15,8 @@ class SectionMapper{
 
         void init1(std::string name, int value, int from);
 
+        char* getSectionContent(std::string name);
+
     private:
         std::map<std::string,char*> content;
 };
