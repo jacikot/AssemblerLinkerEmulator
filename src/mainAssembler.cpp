@@ -13,7 +13,7 @@ int main (int argc, char *argv[])
   std::smatch sm;
   bool f=std::regex_match(drv.file,sm,reg);
   if(!f) return -1;
-  if (argc>2&&argv[2] == "-o")
+  if (argc>2&&(std::string(argv[2]) ==std::string( "-o")))
       drv.outfile=argv[3];
   else {
     drv.outfile=sm[1];
