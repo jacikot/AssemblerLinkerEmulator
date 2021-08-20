@@ -117,9 +117,6 @@ std::vector<SymbolsData> SymbolTable::getAllSections(){
             data.push_back(*pair.second);
         }
     }
-    std::sort(data.begin(),data.end(),[](SymbolsData& d1, SymbolsData&d2){
-        return d2.name.compare(d1.name);
-    });
     return data;
 }
 
@@ -133,9 +130,6 @@ std::vector<SymbolsData> SymbolTable::getAllSymbols(){
     std::vector<SymbolsData> data;
     std::for_each(table->begin(),table->end(),[&data](auto d){
         if(!d.second->isSection &&d.second->global) data.push_back(*d.second);
-    });
-    std::sort(data.begin(),data.end(),[](SymbolsData& d1, SymbolsData&d2){
-        return d2.name.compare(d1.name);
     });
     return data;
 }

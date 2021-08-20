@@ -8,14 +8,22 @@ int main (int argc, char *argv[])
   int res = 0;
   Driver drv;
   if(argc<=1)return -1;
-  drv.file=argv[1];
-  std::regex reg("^([^.]*)\\.[^.]*$");
-  std::smatch sm;
-  bool f=std::regex_match(drv.file,sm,reg);
-  if(!f) return -1;
-  if (argc>2&&(std::string(argv[2]) ==std::string( "-o")))
-      drv.outfile=argv[3];
-  else {
+  drv.outfile="";
+  for(int i=1;i<argc;){
+    if(std::string(argv[i]) ==std::string( "-o")){
+      drv.outfile=argv[i+1];
+      i+=2;
+    }
+    else{
+      drv.file=argv[i];
+      i++;
+    }
+  }
+
+  if(drv.outfile==""){
+    std::regex reg("^([^.]*)\\.[^.]*$");
+    std::smatch sm;
+    bool f=std::regex_match(drv.file,sm,reg);
     drv.outfile=sm[1];
     drv.outfile+=".o";
   }

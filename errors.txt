@@ -36,6 +36,10 @@ src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::se
 src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
    14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
       |         ^~~~~~~~~~~~~~~~
+src/mainAssembler.cpp: In function ‘int main(int, char**)’:
+src/mainAssembler.cpp:26:10: warning: unused variable ‘f’ [-Wunused-variable]
+   26 |     bool f=std::regex_match(drv.file,sm,reg);
+      |          ^
 In file included from src/../h/assembler.h:9,
                  from src/outputgenerator.cpp:2:
 src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
