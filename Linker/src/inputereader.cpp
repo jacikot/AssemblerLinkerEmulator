@@ -60,7 +60,7 @@ std::vector<SectionsData> InputReader::readSections(int cntSec){
 
 }
 
-std::vector<SymbolsData> InputReader::readSymbols(int cntSym){
+std::vector<SymbolsData> InputReader::readSymbols(int cntSym, int f){
     std::vector<SymbolsData> symbols;
     std::string line;
     std::getline(file,line);
@@ -75,13 +75,14 @@ std::vector<SymbolsData> InputReader::readSymbols(int cntSym){
         int number;
         std::getline(file,line);
         file>>number>>data.name>>std::hex>>data.value>>data.section>>data.global;
+        data.file=f;
         symbols.push_back(data);
     }
     std::getline(file,line);
     return symbols;
 }
 
-std::vector<RelocationRecord> InputReader::readRelocations(int cntRel){
+std::vector<RelocationRecord> InputReader::readRelocations(int cntRel, int f){
     std::vector<RelocationRecord> relocations;
     std::string line;
     std::getline(file,line);
@@ -98,6 +99,7 @@ std::vector<RelocationRecord> InputReader::readRelocations(int cntRel){
         file>>std::hex>>data.offset>>data.section>>type>>data.name;
         if(type=="R_386_16")data.type=RelocationType::R_386_16;
         else data.type=RelocationType::R_386_PC16;
+        data.file=f;
         relocations.push_back(data);
     }
     std::getline(file,line);

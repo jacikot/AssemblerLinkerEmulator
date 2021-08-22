@@ -37,6 +37,14 @@ int main (int argc, char *argv[])
   }
   if(!l.hex && !l.linkable)return -1;
   l.readFiles();
+  if(l.checkUndefined()){
+    return -1; //undefined symbols exist
+  }
+  l.resolveSectionOffsets();
+  l.resolveSymbolValues();
+  l.resolveRelocs();
   return res;
 }
+
+
 

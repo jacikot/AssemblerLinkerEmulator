@@ -22,6 +22,9 @@ struct SectionsData{
 
     //size - valid only for sections
     int size;
+
+    //content
+    char* content;
 };
 
 struct SymbolsData{
@@ -36,6 +39,9 @@ struct SymbolsData{
 
     //section name
     std::string section;
+
+    //file id
+    int file;
 };
 
 enum RelocationType{
@@ -55,6 +61,9 @@ struct RelocationRecord{
         //symbol name
         std::string name;
 
+        //file id
+        int file;
+
 };
 
 class InputReader{
@@ -67,9 +76,9 @@ class InputReader{
 
         std::vector<SectionsData> readSections(int cntSec);
 
-        std::vector<SymbolsData> readSymbols(int cntSym);
+        std::vector<SymbolsData> readSymbols(int cntSym, int f);
 
-        std::vector<RelocationRecord> readRelocations(int cntRel);
+        std::vector<RelocationRecord> readRelocations(int cntRel, int f);
 
         std::map<std::string,char*> readSectionsContent(std::vector<SectionsData>*secinfo);
     private:

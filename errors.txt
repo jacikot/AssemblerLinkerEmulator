@@ -1,8 +1,12 @@
 Linker/src/inputereader.cpp: In member function ‘std::map<std::__cxx11::basic_string<char>, char*> InputReader::readSectionsContent(std::vector<SectionsData>*)’:
-Linker/src/inputereader.cpp:112:18: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<SectionsData>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
-  112 |     for(int i=0;i<secinfo->size();i++){
+Linker/src/inputereader.cpp:114:18: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<SectionsData>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  114 |     for(int i=0;i<secinfo->size();i++){
       |                 ~^~~~~~~~~~~~~~~~
+Linker/src/linker.cpp: In member function ‘void Linker::resolveRelocs()’:
+Linker/src/linker.cpp:110:19: warning: unused variable ‘x’ [-Wunused-variable]
+  110 |             short x=*addr;
+      |                   ^
 Linker/src/linker.cpp: In member function ‘int Linker::readFiles()’:
-Linker/src/linker.cpp:17:1: warning: no return statement in function returning non-void [-Wreturn-type]
-   17 | }
+Linker/src/linker.cpp:44:1: warning: control reaches end of non-void function [-Wreturn-type]
+   44 | }
       | ^
