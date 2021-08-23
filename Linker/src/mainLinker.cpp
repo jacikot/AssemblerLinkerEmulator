@@ -10,6 +10,7 @@ int main (int argc, char *argv[])
   Linker l;
   if(argc<=1)return -1;
   std::regex reg("^-place=([a-zA-Z][a-zA-Z_0-9]*)@([0-9]+)$");
+  std::regex reghex("^-place=([a-zA-Z][a-zA-Z_0-9]*)@(0x[0-9A-Fa-f]+)$");
   std::smatch sm;
   for(int i=1;i<argc;){
     if(std::string(argv[i]) ==std::string( "-o")){
@@ -27,7 +28,10 @@ int main (int argc, char *argv[])
     else {
       std::string arg=argv[i];
       if(std::regex_match(arg,sm,reg)){
-        l.secAddr.insert({sm[1],stoi(sm[2])});
+        l.secAddr.insert({sm[1],stoi(sm[2])}); //proveri ove adrese
+      }
+      else if(std::regex_match(arg,sm,reghex)){
+        l.secAddr.insert({sm[1],stoi(sm[2],nullptr,16)});
       }
       else{
         l.files.push_back(arg);
@@ -35,15 +39,7 @@ int main (int argc, char *argv[])
       i++;
     }
   }
-  if(!l.hex && !l.linkable)return -1;
-  l.readFiles();
-  if(l.checkUndefined()){
-    return -1; //undefined symbols exist
-  }
-  l.resolveSectionOffsets();
-  l.resolveSymbolValues();
-  l.resolveRelocs();
-  return res;
+  return l.link();
 }
 
 

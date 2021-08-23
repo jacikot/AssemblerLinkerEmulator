@@ -28,6 +28,8 @@ class OutputGenerator{
     private:
         std::ofstream file;
         bool open=false;
+
+        void printAddress(int addr);
 };
 
 struct sectiondata{

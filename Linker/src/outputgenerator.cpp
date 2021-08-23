@@ -1,35 +1,69 @@
 # include "../h/outputgenerator.h"
-# include "../h/assembler.h"
-# include "../h/symboltable.h"
-# include "../h/relocationtable.h"
+# include "../h/linker.h"
+# include "../h/sectiontable.h"
+# include "../h/symbolstable.h"
+# include <algorithm>
 # include <iomanip>
-# include <iostream>
-# include <printf.h>
 
-
-
-void OutputGenerator::openFile(std::string name){
-    if(!open)file.open(name);
-    open=true;
+int OutputGenerator::open(std::string name){
+    if(opened) return -1;
+    file.open(name);
+    opened=true;
+    return 0;
+}
+int OutputGenerator::close(){
+    if(!opened)return -1;
+    file.close();
+    opened=false;
+    return 0;
 }
 
-void OutputGenerator::closeFile(){
-    if(open)file.close();
-    open=false;
+void OutputGenerator::printAddress(int addr){
+    if(addr<0x1000) file<<'0';
+    if(addr<0x100) file<<'0';
+    if(addr<0x10) file <<'0';
+    file<<std::hex<<addr;
+    file<<":";
 }
 
-void OutputGenerator::printHeader(header h){
-    if(!open)return;
-    h.shsize=sizeof(sectiondata);
+void OutputGenerator::writeHex(Linker*linker){
+    std::vector<SectionsData>sects=linker->getSectionTable().getLinkerData();
+    for(SectionsData& sec:sects){
+        file.setf(std::ios::right);
+        char*content=sec.content;
+        int finished=0;
+        while(finished<sec.size){
+            printAddress(finished+sec.value);
+            int i=0;
+            for(;(i<8)&&((i+finished)<sec.size);i++){
+                file<<" ";
+                int num=(int)*(unsigned char*)(content+i+finished);
+                if(num<16)file<<'0';
+                file<<std::hex<<num;
+            }
+            finished+=i;
+            file<<std::endl;
+        }
+    }
+
+}
+void OutputGenerator::writeLinkable(Linker*linker){
+    header*h=linker->getHeader();
+    writeHeader(h);
+    printSections(linker->getSectionTable());
+    printSymbols(linker->getSymbolTable());
+    printRelocs(linker->getRelTable());
+    printSectionContent(linker->getSectionTable());
+}
+
+void OutputGenerator::writeHeader(header*h){
     file<<"#SCHOOL ELF HEADER:\n"<<std::endl;;
-    file<<" Number of sections:         "<<h.sectioncnt<<std::endl;
-    file<<" Number of symbols:          "<<h.symbolcnt<<std::endl;
-    file<<" Number of relocations:      "<<h.relcnt<<std::endl;
+    file<<" Number of sections:         "<<h->sectionsNum<<std::endl;
+    file<<" Number of symbols:          "<<h->symbolsNum<<std::endl;
+    file<<" Number of relocations:      "<<h->relocsNum<<std::endl;
 }
 
-
-void OutputGenerator::printSections(SymbolTable*symbols){
-    std::vector<SymbolsData>sections=symbols->getAllSections();
+void OutputGenerator::printSections(SectionTable& sectionMap){
     file<<std::endl<<"#SECTIONS"<<std::endl<<std::endl;
     int i=0;
     file.setf(std::ios::left);
@@ -44,23 +78,26 @@ void OutputGenerator::printSections(SymbolTable*symbols){
     file<<"size";
     file.width(MAXLEN);
     file<<"local/global"<<std::endl;
-    for(SymbolsData sym:sections){
+    std::vector<SectionsData> data=sectionMap.getLinkerData();
+    std::for_each(data.begin(),data.end(),[=, &i](SectionsData& d){
         file<<" ";
         file.width(MAXLEN);
         file<<(++i);
         file.width(MAXLEN);
-        file<<sym.name;
+        file<<d.name;
         file.width(MAXLEN);
-        file<<std::hex<<sym.value;
+        file<<std::hex<<d.value;
         file.width(MAXLEN);
-        file<<sym.size;
+        file<<d.size;
         file.width(MAXLEN);
-        file<<((sym.global)?"G":"L")<<std::endl;
-    }
+        file<<((d.global)?"G":"L")<<std::endl;
+    });
+    
 }
 
-void OutputGenerator::printSymbols(SymbolTable*symbols){
-    std::vector<SymbolsData>sections=symbols->getAllSymbols();
+
+void OutputGenerator::printSymbols(SymbolTable&symbols){
+    std::vector<SymbolsData>sections=symbols.getAllSymbols();
     file<<std::endl<<"#SYMBOL TABLE"<<std::endl<<std::endl;
     int i=0;
     file.setf(std::ios::left);
@@ -91,8 +128,7 @@ void OutputGenerator::printSymbols(SymbolTable*symbols){
 }
 
 
-void OutputGenerator::printRelocs(RelocationTable*rels){
-    std::vector<RelocationRecord> relocations=rels->getAllRecords();
+void OutputGenerator::printRelocs(std::vector<RelocationRecord>&relocations){
     file<<std::endl<<"#RELOCATION TABLE"<<std::endl<<std::endl;
     file<<" ";
     file.width(MAXLEN);
@@ -116,20 +152,13 @@ void OutputGenerator::printRelocs(RelocationTable*rels){
     }
 }
 
-void OutputGenerator::printAddress(int addr){
-    if(addr<0x1000) file<<'0';
-    if(addr<0x100) file<<'0';
-    if(addr<0x10) file <<'0';
-    file<<std::hex<<addr;
-    file<<":";
-}
 
-void OutputGenerator::printSectionContent(SectionMapper*sections,SymbolTable*symbols){
-    std::vector<SymbolsData>sects=symbols->getAllSections();
-    for(SymbolsData sec:sects){
+void OutputGenerator::printSectionContent(SectionTable&sections){
+    std::vector<SectionsData>sects=sections.getLinkerData();
+    for(SectionsData& sec:sects){
         file.setf(std::ios::right);
         file<<std::endl<<"#Content of the section "<<sec.name<<std::endl<<std::endl;
-        char*content=sections->getSectionContent(sec.name);
+        char*content=sec.content;
         int finished=0;
         while(finished<sec.size){
             printAddress(finished);

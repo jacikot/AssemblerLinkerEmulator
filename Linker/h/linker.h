@@ -6,32 +6,53 @@
 # include <map>
 # include <vector>
 # include "inputreader.h"
+# include "outputgenerator.h"
+# include "sectiontable.h"
+# include "symbolstable.h"
 
 class Linker{
     public:
+        int link();
+        
         int readFiles(); 
 
-        void resolveSectionOffsets();
+        bool resolveSectionOffsets();
 
         bool checkUndefined();
 
         void resolveSymbolValues();
 
         void resolveRelocs();
+
+        int generateOutput();
+
+        header* getHeader();
+
+        SectionTable& getSectionTable(){
+            return sectionMap;
+        }
+
+        SymbolTable& getSymbolTable(){
+            return symbolsMap;
+        }
+
+        std::vector<RelocationRecord>& getRelTable(){
+            return relocations;
+        }
+
     public:
         std::string outputFile="";
         bool hex=false;
         bool linkable=false;
         std::map<std::string,int> secAddr;
         std::vector<std::string> files;
-        ~Linker();
 
     private:
-        std::map<std::string,std::map<int,SectionsData*>*> sectionMap; 
-        std::map<std::string,SymbolsData*> symbolsMap;
-        std::vector<SymbolsData> undefined;
+        SectionTable sectionMap; 
+        SymbolTable symbolsMap;
         std::vector<RelocationRecord> relocations;
         InputReader reader;
+        OutputGenerator writer;
 
 
 };
