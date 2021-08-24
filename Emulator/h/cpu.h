@@ -3,6 +3,7 @@
 
 # define pc 7
 # define sp 6
+# define pswr 8
 
 
 # define zmask 0x1
@@ -14,7 +15,7 @@
 # define tlmask 0x4000
 # define imask 0x8000
 
-
+# define psw regs[8]
 
 enum IVTEntries{
     ENTRY=0,
@@ -41,6 +42,10 @@ class CPU{
             return regs[id];
         }
 
+        void setReg(int id, short data){
+            regs[id]=data;
+        }
+
         void addend(int reg,int num){
             regs[reg]+=num;
         }
@@ -60,9 +65,113 @@ class CPU{
         void jgt(int addr){
             if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
         }
+
+        void xchg(int dst,int src){
+            short tmp=regs[dst];
+            regs[dst]=regs[src];
+            regs[src]=tmp;
+        }
+
+        void add(int dst,int src){
+            regs[dst]+=regs[src];
+        }
+
+        void sub(int dst,int src){
+            regs[dst]-=regs[src];
+        }
+
+        void mul(int dst,int src){
+            regs[dst]*=regs[src];
+        }
+
+        void div(int dst,int src){
+            regs[dst]/=regs[src];
+        }
+
+        void cmp(int dst,int src){
+            short j = -regs[1];
+            unsigned tmp=(unsigned short)regs[dst]+(unsigned short)j;
+            //z
+            if(tmp==0) psw|=zmask;
+            else psw&=~zmask;
+            //o
+            if( 
+                ((regs[dst]&0x8000)&&!(regs[src]&0x8000)&&!(tmp&0x8000))||
+                (!(regs[dst]&0x8000)&&(regs[src]&0x8000)&&(tmp&0x8000))
+            ) psw|=omask;
+            else psw&=~omask;
+            //c
+            if(tmp&0x10000) psw|=cmask;
+            else psw&=~cmask;
+            //n
+            if(tmp&0x8000) psw|=nmask;
+            else psw&=~nmask;
+        }
+
+
+        void orop(int dst, int src){
+            regs[dst]|=regs[src];
+        }
+
+        void xorop(int dst, int src){
+            regs[dst]^=regs[src];
+        }
+
+        void notop(int dst){
+            regs[dst]=~regs[dst];
+        }
+
+        void andop(int dst, int src){
+            regs[dst]&=regs[src];
+        }
+
+        void test(int dst, int src){
+            short tmp=regs[dst]&regs[src];
+            //z
+            if(tmp==0) psw|=zmask;
+            else psw&=~zmask;
+            //n
+            if(tmp&0x8000) psw|=nmask;
+            else psw&=~nmask;
+        }
+
+        void shl(int dst, int src){
+            short tmp=regs[dst]<<(regs[src]-1);
+            //c
+            if(tmp&0x8000) psw|=cmask;
+            else psw&=~cmask;
+            regs[dst]=tmp<<1;
+            //z
+            if(regs[dst]==0) psw|=zmask;
+            else psw&=~zmask;
+            //n
+            if(regs[dst]&0x8000) psw|=nmask;
+            else psw&=~nmask;
+        }
+
+        void shr(int dst, int src){
+            short tmp=regs[dst]>>(regs[src]-1);
+            //c
+            if(tmp&0x1) psw|=cmask;
+            else psw&=~cmask;
+            regs[dst]=tmp>>1;
+            //z
+            if(regs[dst]==0) psw|=zmask;
+            else psw&=~zmask;
+            //n
+            if(regs[dst]&0x8000) psw|=nmask;
+            else psw&=~nmask;
+        }
+
+        void ldr(int reg,int val){
+            regs[reg]=val;
+        }
+
+
+
+
     private:
-        short regs[8];
-        short psw;
+        short regs[9];
 };
 
 

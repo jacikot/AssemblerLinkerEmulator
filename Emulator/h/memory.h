@@ -14,6 +14,10 @@ class Memory{
         int initialize( std::map<int,std::vector<char>>&content);
 
         char read1(int address);
+
+        short read2(int address);
+
+        void store2(int address,short data);
     private:
         char memory[CAPACITY];
         

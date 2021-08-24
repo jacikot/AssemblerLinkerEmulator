@@ -22,3 +22,19 @@ char Memory::read1(int address){
     }
     return memory[address];
 }
+
+short Memory::read2(int address){
+    if(address+1>=0x10000){
+        //exception
+        return InstructionType::ERROR;
+    }
+    return *((short*)(memory+address));
+}
+
+void Memory::store2(int address,short data){
+    if(address+1>=0x10000){
+        //exception
+        return;
+    }
+    *((short*)(memory+address))=data;
+}
