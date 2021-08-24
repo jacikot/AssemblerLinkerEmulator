@@ -9,9 +9,6 @@
 # include <map>
 
 
-enum Addressing{
-    IMMED=0b0000, REGDIRPOM=0b0101, MEMDIR=0b0100, REGDIR=0b0001, REGIND=0b0010, REGINDPOM=0b0011
-};
 enum InstructionType{
     HALT=0b00000000, 
     INT=0b00010000, 
@@ -46,10 +43,10 @@ enum Addressing{
     IMMED=0b0000, REGDIRPOM=0b0101, MEMDIR=0b0100, REGDIR=0b0001, REGIND=0b0010, REGINDPOM=0b0011
 };
 
-# define REGD(byte) (byte>>4)&0xF;
-# define REGS(byte) byte&0xF;
-# define ADDRH(byte) (byte>>4)&0xF;
-# define ADDRL(byte) byte&0xF;
+# define REGD(byte) (byte>>4)&0xF
+# define REGS(byte) byte&0xF
+# define ADDRH(byte) (byte>>4)&0xF
+# define ADDRL(byte) byte&0xF
 
 
 class Emulator{
@@ -71,6 +68,7 @@ class Emulator{
         void storeToOperand(int addr, int regs);
         void pop(int regD);
         void push(int regD);
+        void reset();
         
 
 };

@@ -19,7 +19,7 @@
 
 enum IVTEntries{
     ENTRY=0,
-    ERROR=1,
+    ERRORIVT=1,
     TIMER=2,
     TERMINAL=3
 };

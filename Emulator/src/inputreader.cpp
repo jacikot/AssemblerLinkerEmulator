@@ -3,7 +3,7 @@
 # include <regex>
 
 int InputReader::open(std::string name){
-    if(!open)file.open(name);
+    if(!isopen)file.open(name);
     else return -1;
     isopen=true;
     return 0;
@@ -23,7 +23,7 @@ std::map<int,std::vector<char>> InputReader::read(){
         std::stringstream str(line);
         std::string data;
         std::getline(str,data,' ');
-        std::regex reg("^[0-9]*:$");
+        std::regex reg("^([0-9a-fA-F]*):$");
         std::smatch sm;
         if(!std::regex_match(data,sm, reg)){
             //exception 
