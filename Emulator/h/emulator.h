@@ -6,6 +6,7 @@
 # include "inputreader.h"
 # include "cpu.h"
 # include "terminal.h"
+# include "timer.h"
 # include <vector>
 # include <map>
 
@@ -64,10 +65,12 @@ class Emulator{
     private:
         InputReader reader;
         Memory memory;
+        Terminal terminal;
+        Timer timer;
         CPU cpu;
         bool finished=false;
         std::map<int,std::vector<char>>content;
-        Terminal terminal;
+        
 
     private:
         int getOperand(int addr, int regs);

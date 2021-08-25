@@ -114,6 +114,7 @@ void Emulator::reset(){
     cpu.setReg(sp,SP_START);
     cpu.setReg(pswr,0);
     terminal.init(&memory,&cpu);
+    timer.init(&memory,&cpu);
 }
 
 int Emulator::init(){
@@ -239,6 +240,7 @@ int Emulator::emulate(){
         }
         terminal.printout(); //print out character to stdout if exist
         terminal.readin(); //read character entered by keyboard if exist
+        timer.tick(); //check timer
         interrupts();
     }
 }
