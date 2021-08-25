@@ -2,6 +2,7 @@
 # include <vector>
 # include <map>
 # include "../h/cpu.h"
+# include <iostream>
 
 
 
@@ -108,15 +109,21 @@ int Emulator::getOperand(int addr, int regs){
 }
 
 void Emulator::reset(){
-    unsigned short startAddr=memory.read2(IVTEntries::ENTRY);
+    unsigned short startAddr=memory.read2(Interrupts::ENTRY);
     cpu.setReg(pc,startAddr);
+    cpu.setReg(sp,SP_START);
+    cpu.setReg(pswr,0);
+    terminal.init(&memory,&cpu);
+}
+
+int Emulator::init(){
+    if(readInput()<0)return -1;
+    memory.initialize(content);
+    reset();
 }
 
 int Emulator::emulate(){
     short operand;
-    if(readInput()<0)return -1;
-    memory.initialize(content);
-    reset();
     while(!finished){
         unsigned char byte=memory.read1(cpu.getPC());
         char reg;
@@ -132,6 +139,7 @@ int Emulator::emulate(){
                 break;
             case InstructionType::INT:
                 reg=memory.read1(cpu.getPC());
+                //push(pc)?
                 push(pswr);
                 operand=memory.read2((cpu.getReg(REGD(reg))%8)*2);
                 cpu.setReg(pc,operand);
@@ -218,7 +226,7 @@ int Emulator::emulate(){
                 reg=memory.read1(cpu.getPC());
                 addr=memory.read1(cpu.getPC());
                 operand=getOperand(addr,reg);
-                cpu.ldr(REGD(reg),operand);
+               cpu.ldr(REGD(reg),operand);
                 break;
             case InstructionType::STR:
                 reg=memory.read1(cpu.getPC());
@@ -229,9 +237,19 @@ int Emulator::emulate(){
                 //error
                 break;
         }
+        terminal.printout(); //print out character to stdout if exist
+        terminal.readin(); //read character entered by keyboard if exist
+        interrupts();
     }
-    
+}
 
+void Emulator::interrupts(){
+    int interrupt=cpu.interruptExist();
+    if(interrupt==-1)return;
+    push(pc);
+    push(pswr);
+    short addr=memory.read2(interrupt*2);
+    cpu.setReg(pc,addr);
 }
 
 void Emulator::pop(int regD){

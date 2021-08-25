@@ -1,28 +1,32 @@
 In file included from Emulator/src/../h/emulator.h:7,
                  from Emulator/src/emulator.cpp:1:
 Emulator/src/../h/cpu.h: In member function ‘void CPU::jgt(int)’:
-Emulator/src/../h/cpu.h:66:34: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
-   66 |             if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
+Emulator/src/../h/cpu.h:67:34: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+   67 |             if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
       |                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~
 Emulator/src/emulator.cpp: In member function ‘int Emulator::emulate()’:
-Emulator/src/emulator.cpp:235:1: warning: control reaches end of non-void function [-Wreturn-type]
-  235 | }
+Emulator/src/emulator.cpp:244:1: warning: no return statement in function returning non-void [-Wreturn-type]
+  244 | }
+      | ^
+Emulator/src/emulator.cpp: In member function ‘int Emulator::init()’:
+Emulator/src/emulator.cpp:123:1: warning: control reaches end of non-void function [-Wreturn-type]
+  123 | }
       | ^
 In file included from Emulator/src/../h/emulator.h:7,
                  from Emulator/src/mainEmulator.cpp:5:
 Emulator/src/../h/cpu.h: In member function ‘void CPU::jgt(int)’:
-Emulator/src/../h/cpu.h:66:34: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
-   66 |             if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
+Emulator/src/../h/cpu.h:67:34: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+   67 |             if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
       |                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~
 Emulator/src/mainEmulator.cpp: In function ‘int main(int, char**)’:
-Emulator/src/mainEmulator.cpp:8:7: warning: unused variable ‘res’ [-Wunused-variable]
-    8 |   int res=0;
+Emulator/src/mainEmulator.cpp:9:7: warning: unused variable ‘res’ [-Wunused-variable]
+    9 |   int res=0;
       |       ^~~
 In file included from Emulator/src/../h/emulator.h:7,
                  from Emulator/src/memory.cpp:3:
 Emulator/src/../h/cpu.h: In member function ‘void CPU::jgt(int)’:
-Emulator/src/../h/cpu.h:66:34: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
-   66 |             if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
+Emulator/src/../h/cpu.h:67:34: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+   67 |             if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
       |                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~
 Emulator/src/memory.cpp: In lambda function:
 Emulator/src/memory.cpp:11:22: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<char>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
@@ -32,3 +36,8 @@ Emulator/src/memory.cpp: In member function ‘int Memory::initialize(std::map<i
 Emulator/src/memory.cpp:15:1: warning: no return statement in function returning non-void [-Wreturn-type]
    15 | }
       | ^
+In file included from Emulator/src/terminal.cpp:3:
+Emulator/src/../h/cpu.h: In member function ‘void CPU::jgt(int)’:
+Emulator/src/../h/cpu.h:67:34: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+   67 |             if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
+      |                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~

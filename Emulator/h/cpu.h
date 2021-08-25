@@ -17,7 +17,8 @@
 
 # define psw regs[8]
 
-enum IVTEntries{
+
+enum Interrupts{
     ENTRY=0,
     ERRORIVT=1,
     TIMER=2,
@@ -28,7 +29,7 @@ enum IVTEntries{
 class CPU{
     public:
         CPU(){
-            regs[pc]=IVTEntries::ENTRY;
+            regs[pc]=Interrupts::ENTRY;
         }
         short getPC(){
             return regs[pc]++;
@@ -167,11 +168,36 @@ class CPU{
             regs[reg]=val;
         }
 
+        void notifyInterrupt(int num){
+            if(num>7)return;
+            interrupts[num]=true;
+        }
 
+        int interruptExist(){
+            if((psw&imask))return -1;
+            for(int i=0;i<8;i++){
+                switch(i){
+                    case Interrupts::TIMER:
+                        if((psw&trmask)||!interrupts[i]) break;
+                        interrupts[i]=false;
+                        return i;
+                    case Interrupts::TERMINAL:
+                        if((psw&tlmask)||!interrupts[i]) break;
+                        interrupts[i]=false;
+                        return i;
+                    default:
+                        if(!interrupts[i]) break;
+                        interrupts[i]=false;
+                        return i;
+                }
+            }
+            return -1;
+        }
 
 
     private:
         short regs[9];
+        bool interrupts[8];
 };
 
 

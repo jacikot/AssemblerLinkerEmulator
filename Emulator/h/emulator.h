@@ -5,8 +5,11 @@
 # include "memory.h"
 # include "inputreader.h"
 # include "cpu.h"
+# include "terminal.h"
 # include <vector>
 # include <map>
+
+# define SP_START 0xFEFE
 
 
 enum InstructionType{
@@ -54,6 +57,8 @@ class Emulator{
         int emulate();
 
         int readInput();
+
+        int init();
     public:
         std::string inputFile;
     private:
@@ -62,6 +67,7 @@ class Emulator{
         CPU cpu;
         bool finished=false;
         std::map<int,std::vector<char>>content;
+        Terminal terminal;
 
     private:
         int getOperand(int addr, int regs);
@@ -69,6 +75,7 @@ class Emulator{
         void pop(int regD);
         void push(int regD);
         void reset();
+        void interrupts();
         
 
 };
