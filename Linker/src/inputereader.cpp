@@ -1,4 +1,5 @@
 # include "../h/inputreader.h"
+# include "../h/exceptions.h"
 
 # include <regex> 
 # include <string> 
@@ -29,7 +30,9 @@ header* InputReader::readHeader(){
     header* h=new header();
     std::string line;
     std::getline(file,line);
-    if(line!="#SCHOOL ELF HEADER:")return nullptr;
+    if(line!="#SCHOOL ELF HEADER:"){
+        throw LinkerException("Wrong file format!");
+    }
     std::getline(file,line);
     h->sectionsNum=readNum();
     h->symbolsNum=readNum();
@@ -44,7 +47,7 @@ std::vector<SectionsData> InputReader::readSections(int cntSec){
     std::getline(file,line);
     std::getline(file,line);
     if(line!="#SECTIONS"){
-        //exception
+        throw LinkerException("Wrong file format!");
         return sections;
     }
     std::getline(file,line);
@@ -66,7 +69,7 @@ std::vector<SymbolsData> InputReader::readSymbols(int cntSym, int f){
     std::getline(file,line);
     std::getline(file,line);
     if(line!="#SYMBOL TABLE"){
-        //exception
+        throw LinkerException("Wrong file format!");
         return symbols;
     }
     std::getline(file,line);
@@ -88,7 +91,7 @@ std::vector<RelocationRecord> InputReader::readRelocations(int cntRel, int f){
     std::getline(file,line);
     std::getline(file,line);
     if(line!="#RELOCATION TABLE"){
-        //exception
+        throw LinkerException("Wrong file format!");
         return relocations;
     }
     std::getline(file,line);
@@ -117,7 +120,7 @@ std::map<std::string,char*> InputReader::readSectionsContent(std::vector<Section
         std::regex reg("#Content of the section ([a-zA-Z][a-zA-Z_0-9]*)");
         std::smatch sm;
         if(!std::regex_match(line,sm, reg)){
-            //exception 
+            throw LinkerException("Wrong file format!");
             return map;
         }
         std::string sec=sm[1];

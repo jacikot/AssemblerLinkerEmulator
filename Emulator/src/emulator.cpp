@@ -1,10 +1,10 @@
 # include "../h/emulator.h"
+# include "../h/cpu.h"
+# include "../h/exceptions.h"
+
+# include <iostream>
 # include <vector>
 # include <map>
-# include "../h/cpu.h"
-# include <iostream>
-
-
 
 void Emulator::storeToOperand(int addr, int regs){
     short val=cpu.getReg(REGD(regs));
@@ -51,8 +51,8 @@ void Emulator::storeToOperand(int addr, int regs){
             }
             return memory.store2(a,val);
         default:
-            //error - impossible to store immed and regdirpom
-           return;
+            cpu.notifyInterrupt(Interrupts::ERRORIVT);
+            return;
     }
 }
 
@@ -103,12 +103,13 @@ int Emulator::getOperand(int addr, int regs){
         case Addressing::REGDIRPOM: 
             return cpu.getReg(REGS(regs))+ memory.read2(cpu.getPC2());
         default:
-            //error
+            cpu.notifyInterrupt(Interrupts::ERRORIVT);
             return -1;
     }
 }
 
 void Emulator::reset(){
+    memory.initialize(content);
     unsigned short startAddr=memory.read2(Interrupts::ENTRY);
     cpu.setReg(pc,startAddr);
     cpu.setReg(sp,SP_START);
@@ -235,7 +236,7 @@ int Emulator::emulate(){
                 storeToOperand(addr,reg);
                 break;
             default: 
-                //error
+                cpu.notifyInterrupt(Interrupts::ERRORIVT);
                 break;
         }
         terminal.printout(); //print out character to stdout if exist
@@ -268,7 +269,9 @@ void Emulator::push(int regD){
 }
 
 int Emulator::readInput(){
-    if(reader.open(inputFile)<0)return -1;
+    if(reader.open(inputFile)<0){
+        throw EmulatorException("Input file cannot be opened!");
+    }
     content=reader.read();
     reader.close();
     return 0;

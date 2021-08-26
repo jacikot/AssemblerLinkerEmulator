@@ -1,13 +1,15 @@
 # include "../h/symbolstable.h"
 # include <algorithm>
 # include "../h/sectiontable.h"
+# include "../h/exceptions.h"
 
 int SymbolTable::insertSymbol(SymbolsData&d){
     if(d.section!="UND"&&exist(d.name)){
-        //exception duplicate name
-        return -2;
+        throw LinkerException("Double definition of symbol "+d.name+" found!");
     }
-    if(d.section!="UND")symbolsMap.insert({d.name,new SymbolsData(d)});
+    if(d.section!="UND"){
+        symbolsMap.insert({d.name,new SymbolsData(d)});
+    }
     else undefined.push_back(d);
     return 0;
 }
@@ -26,7 +28,7 @@ SymbolTable::~SymbolTable(){
 bool SymbolTable::checkUndefined(){
     for(SymbolsData& s:undefined){
         if(symbolsMap.find(s.name)==symbolsMap.end()){
-            return true;
+            throw LinkerException("Undefined symbol "+s.name+" found!");
         }
     }
     return false;

@@ -3,6 +3,7 @@
 # include <string> 
 # include <regex>
 # include "../h/linker.h"
+# include "../h/exceptions.h"
 
 int main (int argc, char *argv[])
 {
@@ -39,7 +40,14 @@ int main (int argc, char *argv[])
       i++;
     }
   }
-  return l.link();
+  try{
+    return l.link();
+  }
+  catch(LinkerException exc){
+    std::cerr<<exc<<std::endl;
+    exit(-1);
+  }
+  
 }
 
 

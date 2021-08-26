@@ -1,5 +1,6 @@
 # include "../h/sectiontable.h"
 # include <algorithm>
+# include "../h/exceptions.h"
 
 bool SectionTable::exist(std::string name){
     return sectionMap.find(name)!=sectionMap.end();
@@ -45,7 +46,8 @@ bool SectionTable::resolveSectionOffsets(bool hex,std::map<std::string,int>& sec
             if(hex)start=addr;
         }
     });
-    return checkAddresses();
+    if(hex) return checkAddresses();
+    else return true;
 }
 
 SectionTable::~SectionTable(){
@@ -105,7 +107,7 @@ bool SectionTable::checkAddresses(){
     std::vector<SectionsData> ret=getLinkerData();
     for(auto i=ret.begin();i!=(ret.end()-1);i++){
         if(i->value+i->size>(i+1)->value){
-            return false;
+            throw LinkerException("Sections "+ i->name+" and "+(i+1)->name+" overlap!");
         }
     }
     return true;

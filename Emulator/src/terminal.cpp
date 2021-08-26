@@ -1,6 +1,7 @@
 # include "../h/terminal.h"
 # include "../h/memory.h"
 # include "../h/cpu.h"
+# include "../h/exceptions.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -29,7 +30,7 @@ void Terminal::init(Memory*mem, CPU*processor){
 
     int status = tcgetattr(STDIN_FILENO, &oldCONFIG); //get curent configuration to config
     if ( status < 0) {
-        //exception
+        throw EmulatorException("Terminal cannot be configured");
         return;
     }
 
@@ -43,14 +44,16 @@ void Terminal::init(Memory*mem, CPU*processor){
 
     //set configuration
     if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &config)) {
-        //exception
+        throw EmulatorException("Terminal cannot be configured");
     }
     //it is called before exit
     if (atexit(restoreConfig) != 0) {
-        //exception
+        throw EmulatorException("Terminal cannot be configured");
     }
 
-    if (exitTerminal) exit(-1);
+    if (exitTerminal) {
+        throw EmulatorException("Terminal stopped");
+    }
 }
 
 
@@ -69,6 +72,8 @@ void Terminal::readin(){
         memory->store2(TERM_IN,x);
         cpu->notifyInterrupt(Interrupts::TERMINAL);
     }
-    if (exitTerminal) exit(1);
+    if (exitTerminal) {
+        throw EmulatorException("Terminal stopped");
+    }
 }
 

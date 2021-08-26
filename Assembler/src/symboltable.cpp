@@ -1,4 +1,5 @@
 # include "../h/symboltable.h"
+# include "../h/exceptions.h"
 # include <vector>
 # include <algorithm>
 
@@ -10,14 +11,14 @@ bool SymbolTable::exists(std::string name){
 }
 void SymbolTable::addSymbol(std::string name, std::string section, int value){
     if(table->find(name)!=table->end()){
-        //handluje exception
+        throw AssemblerException("line"+std::to_string(line)+": Double definition of symbol "+name);
         return;
     }
     SymbolsData* smb=new SymbolsData();
+    smb->global=false;
     smb->name=name;
     smb->section=section;
     smb->value=value;
-    smb->global=false;
     smb->isSection=false;
     table->insert({name,smb});
     std::vector<int> x;
@@ -26,7 +27,7 @@ void SymbolTable::addSymbol(std::string name, std::string section, int value){
 
 void SymbolTable::addSection(std::string name){
     if(table->find(name)!=table->end()){
-        //handluje exception
+        throw AssemblerException("line"+std::to_string(line)+": Double definition of section " +name);
         return;
     }
     SymbolsData* smb=new SymbolsData();
@@ -44,21 +45,21 @@ void SymbolTable::setSectionSize(std::string name, int value){
 
 void SymbolTable::addAbsoluteSymbol(std::string name, int value){
     if(table->find(name)!=table->end()){
-        //handluje exception
+        throw AssemblerException("line"+std::to_string(line)+": Double definition of symbol "+name);
         return;
     }
     SymbolsData* smb=new SymbolsData();
+    smb->global=false;
     smb->name=name;
     smb->section="ABS";
     smb->value=value;
-    smb->global=false;
     smb->isSection=false;
     table->insert({name,smb});
 }
 
 void SymbolTable::addUndefinedSymbol(std::string name){
     if(table->find(name)!=table->end()){
-        //handluje exception
+        throw AssemblerException("line"+std::to_string(line)+": Extern symbol "+name+" defined in this file ");
         return;
     }
     SymbolsData* smb=new SymbolsData();
@@ -71,7 +72,7 @@ void SymbolTable::addUndefinedSymbol(std::string name){
 
 void SymbolTable::setGlobalSymbol(std::string name){
     if(table->find(name)==table->end()){
-        //handluje exception
+        throw AssemblerException("line"+std::to_string(line)+": Global symbol "+name+" is not defined in this file");
         return;
     }
     table->find(name)->second->global=true;
@@ -80,7 +81,6 @@ void SymbolTable::setGlobalSymbol(std::string name){
 
 int SymbolTable::getSectionSize(std::string name){
     if(table->find(name)==table->end()||!table->find(name)->second->isSection){
-        //handluje exception
         return -1;
     }
     return table->find(name)->second->size;
@@ -88,23 +88,21 @@ int SymbolTable::getSectionSize(std::string name){
 
 int SymbolTable::getValue(std::string name){
     if(table->find(name)==table->end()){
-        //handluje exception
-        return -1;
+        throw AssemblerException("line"+std::to_string(line)+": Symbol "+name+" is not defined in this file");
     }
     return table->find(name)->second->value;
 }
 
 bool SymbolTable::isGlobal(std::string name){
     if(table->find(name)==table->end()){
-        //hendluj exception
-        return false;
+        throw AssemblerException("line"+std::to_string(line)+": Global symbol "+name+" is not defined in this file");
     }
     return table->find(name)->second->global;
 }
 
 std::string SymbolTable::getSection(std::string name){
     if(table->find(name)==table->end()){
-        //hendluj exception
+        throw AssemblerException("line"+std::to_string(line)+": Global symbol "+name+" is not defined in this file");
         return "";
     }
     return table->find(name)->second->section;

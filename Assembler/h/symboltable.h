@@ -30,9 +30,10 @@ class SymbolTable{
     
     private:
         std::map <std::string,SymbolsData*>* table;
+        int& line;
     
     public:
-        SymbolTable(){
+        SymbolTable(int&x):line(x){
             table=new std::map<std::string,SymbolsData*>();
         }
 

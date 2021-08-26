@@ -7,14 +7,14 @@
 #SECTIONS
 
  number         name           value          size           local/global   
- 1              ivt            0              10             L              
- 2              isr            0              3e             L              
+ 1              isr            0              3e             L              
+ 2              ivt            0              10             L              
 
 #SYMBOL TABLE
 
  number         name           value          section        local/global   
- 1              myStart        0              UND            G              
- 2              myCounter      0              UND            G              
+ 1              myCounter      0              UND            G              
+ 2              myStart        0              UND            G              
 
 #RELOCATION TABLE
 
@@ -26,13 +26,13 @@
  29             isr            R_386_PC16     myCounter      
  35             isr            R_386_16       myCounter      
 
-#Content of the section ivt
-
-   0: 00 00 00 00 05 00 16 00 00 00 00 00 00 00 00 00
-
 #Content of the section isr
 
-   0: 50 ff 00 00 00 b0 06 12 a0 0f 00 54 00 b0 0f 04
-  10: 00 ff a0 06 42 20 b0 06 12 b0 16 12 a0 0f 04 02
-  20: ff b0 0f 04 00 ff a0 07 03 fe ff a0 1f 00 01 00
-  30: 70 01 b0 0f 04 00 00 a0 16 42 a0 06 42 20
+0000: 50 ff 00 00 00 b0 06 12 a0 0f 00 54 00 b0 0f 04
+0010: 00 ff a0 06 42 20 b0 06 12 b0 16 12 a0 0f 04 02
+0020: ff b0 0f 04 00 ff a0 07 03 fe ff a0 1f 00 01 00
+0030: 70 01 b0 0f 04 00 00 a0 16 42 a0 06 42 20
+
+#Content of the section ivt
+
+0000: 00 00 00 00 05 00 16 00 00 00 00 00 00 00 00 00

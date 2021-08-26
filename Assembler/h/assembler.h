@@ -58,17 +58,20 @@ class Assembler{
         void initPcRel(std::string name);
 
         int output(std::string filename);
+    public:
+        int line=1;
     private:
         int getRegNo(std::string reg);
         header getHeaderData();
         std::vector<tokens::Line>lines;
-        SymbolTable symbolTable;
+        SymbolTable symbolTable=SymbolTable(line);
         SectionMapper sections;
         RelocationTable relocations;
         OutputGenerator generator;
         int counter=0;
         std::string curSection="";
         bool finished=false;
+    
     
 };
 

@@ -28,171 +28,58 @@ enum Interrupts{
 
 class CPU{
     public:
-        CPU(){
-            regs[pc]=Interrupts::ENTRY;
-        }
-        short getPC(){
-            return regs[pc]++;
-        }
-        short getPC2(){
-            regs[pc]+=2;
-            return regs[pc]-2;
-        }
+        CPU();
 
-        short getReg(int id){
-            return regs[id];
-        }
+        short getPC();
 
-        void setReg(int id, short data){
-            regs[id]=data;
-        }
+        short getPC2();
 
-        void addend(int reg,int num){
-            regs[reg]+=num;
-        }
+        short getReg(int id);
 
-        void jmp(int addr){
-            regs[pc]=addr;
-        }
+        void setReg(int id, short data);
 
-        void jeq(int addr){
-            if(psw&zmask)regs[pc]=addr;
-        }
+        void addend(int reg,int num);
 
-        void jne(int addr){
-            if(!(psw&zmask))regs[pc]=addr;
-        }
+        void jmp(int addr);
 
-        void jgt(int addr){
-            if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
-        }
+        void jeq(int addr);
 
-        void xchg(int dst,int src){
-            short tmp=regs[dst];
-            regs[dst]=regs[src];
-            regs[src]=tmp;
-        }
+        void jne(int addr);
 
-        void add(int dst,int src){
-            regs[dst]+=regs[src];
-        }
+        void jgt(int addr);
 
-        void sub(int dst,int src){
-            regs[dst]-=regs[src];
-        }
+        void xchg(int dst,int src);
 
-        void mul(int dst,int src){
-            regs[dst]*=regs[src];
-        }
+        void add(int dst,int src);
 
-        void div(int dst,int src){
-            regs[dst]/=regs[src];
-        }
+        void sub(int dst,int src);
 
-        void cmp(int dst,int src){
-            short j = -regs[1];
-            unsigned tmp=(unsigned short)regs[dst]+(unsigned short)j;
-            //z
-            if(tmp==0) psw|=zmask;
-            else psw&=~zmask;
-            //o
-            if( 
-                ((regs[dst]&0x8000)&&!(regs[src]&0x8000)&&!(tmp&0x8000))||
-                (!(regs[dst]&0x8000)&&(regs[src]&0x8000)&&(tmp&0x8000))
-            ) psw|=omask;
-            else psw&=~omask;
-            //c
-            if(tmp&0x10000) psw|=cmask;
-            else psw&=~cmask;
-            //n
-            if(tmp&0x8000) psw|=nmask;
-            else psw&=~nmask;
-        }
+        void mul(int dst,int src);
+
+        void div(int dst,int src);
+
+        void cmp(int dst,int src);
 
 
-        void orop(int dst, int src){
-            regs[dst]|=regs[src];
-        }
+        void orop(int dst, int src);
 
-        void xorop(int dst, int src){
-            regs[dst]^=regs[src];
-        }
+        void xorop(int dst, int src);
 
-        void notop(int dst){
-            regs[dst]=~regs[dst];
-        }
+        void notop(int dst);
 
-        void andop(int dst, int src){
-            regs[dst]&=regs[src];
-        }
+        void andop(int dst, int src);
 
-        void test(int dst, int src){
-            short tmp=regs[dst]&regs[src];
-            //z
-            if(tmp==0) psw|=zmask;
-            else psw&=~zmask;
-            //n
-            if(tmp&0x8000) psw|=nmask;
-            else psw&=~nmask;
-        }
+        void test(int dst, int src);
 
-        void shl(int dst, int src){
-            short tmp=regs[dst]<<(regs[src]-1);
-            //c
-            if(tmp&0x8000) psw|=cmask;
-            else psw&=~cmask;
-            regs[dst]=tmp<<1;
-            //z
-            if(regs[dst]==0) psw|=zmask;
-            else psw&=~zmask;
-            //n
-            if(regs[dst]&0x8000) psw|=nmask;
-            else psw&=~nmask;
-        }
+        void shl(int dst, int src);
 
-        void shr(int dst, int src){
-            short tmp=regs[dst]>>(regs[src]-1);
-            //c
-            if(tmp&0x1) psw|=cmask;
-            else psw&=~cmask;
-            regs[dst]=tmp>>1;
-            //z
-            if(regs[dst]==0) psw|=zmask;
-            else psw&=~zmask;
-            //n
-            if(regs[dst]&0x8000) psw|=nmask;
-            else psw&=~nmask;
-        }
+        void shr(int dst, int src);
 
-        void ldr(int reg,int val){
-            regs[reg]=val;
-        }
+        void ldr(int reg,int val);
 
-        void notifyInterrupt(int num){
-            if(num>7)return;
-            interrupts[num]=true;
-        }
+        void notifyInterrupt(int num);
 
-        int interruptExist(){
-            if((psw&imask))return -1;
-            for(int i=0;i<8;i++){
-                switch(i){
-                    case Interrupts::TIMER:
-                        if((psw&trmask)||!interrupts[i]) break;
-                        interrupts[i]=false;
-                        return i;
-                    case Interrupts::TERMINAL:
-                        if((psw&tlmask)||!interrupts[i]) break;
-                        interrupts[i]=false;
-                        return i;
-                    default:
-                        if(!interrupts[i]) break;
-                        interrupts[i]=false;
-                        return i;
-                }
-            }
-            return -1;
-        }
+        int interruptExist();
 
 
     private:

@@ -1,12 +1,12 @@
-#include "../h/assembler.h"
-#include "../h/tokens.h"
+# include "../h/assembler.h"
+# include "../h/tokens.h"
+# include "../h/exceptions.h"
 
 # include <iostream>
 
 void Assembler::addToCounter(int size){
     if(curSection==""){
-         //handle error
-         return;
+         throw AssemblerException("line"+std::to_string(line)+": Section not defined!");
     }
     counter+=size;
     symbolTable.setSectionSize(curSection,counter);
@@ -35,7 +35,9 @@ void Assembler::addUndefinedSymbol(std::string name){
 }
 
 int Assembler::secondPass(){
+    line=0;
     for(tokens::Line& l:lines){
+        line++;
         int i=l.exp->secondPass(this);
         if(i!=0)return i;
     }
@@ -52,15 +54,14 @@ void Assembler::setNewSection(std::string name){
     curSection=name;
     int size = symbolTable.getSectionSize(name);
     if(size == -1){
-        //hanle error
-        return;
+        throw AssemblerException("line"+std::to_string(line)+": Section "+curSection+" not defined!");
     }
     sections.newSectionContent(name,size);
 }
 
 void Assembler::skip(int size){
     if(curSection==""){
-         //handle error
+         throw AssemblerException("line"+std::to_string(line)+": Section not defined!");
          return;
     }
     sections.skip(curSection,size,counter);
@@ -69,7 +70,7 @@ void Assembler::skip(int size){
 
 void Assembler::initLiteral(int value){
     if(curSection==""){
-         //handle error
+         throw AssemblerException("line"+std::to_string(line)+": Section not defined!");
          return;
     }
     sections.init2(curSection,value,counter);
@@ -78,12 +79,12 @@ void Assembler::initLiteral(int value){
 
 void Assembler::initSymbol(std::string name){
     if(curSection==""){
-         //handle error
+         throw AssemblerException("line"+std::to_string(line)+": Section not defined!");
          return;
     }
     if(!symbolTable.exists(name)){
-        //handle error
-         return;
+        throw AssemblerException("line"+std::to_string(line)+": Symbol "+name+" not declared!");
+        return;
     }
     int offset=symbolTable.getValue(name);
     std::string section=symbolTable.getSection(name);
@@ -101,7 +102,7 @@ void Assembler::initSymbol(std::string name){
 
 void Assembler::initInstr0(int opcode){
     if(curSection==""){
-         //handle error
+         throw AssemblerException("line"+std::to_string(line)+": Section not defined!");
          return;
     }
     sections.init1(curSection,opcode,counter);
@@ -189,7 +190,7 @@ void Assembler::initOperand(tokens::Operand op, std::string dst, int addend){
 
 void Assembler::initPcRel(std::string name){
     if(curSection==""){
-         //handle error
+         throw AssemblerException("line"+std::to_string(line)+": Section not defined!");
          return;
     }
     int offset=symbolTable.getValue(name);
@@ -213,7 +214,7 @@ void Assembler::initPcRel(std::string name){
 
 void Assembler::initInstr2REGREG(int opcode, std::string dst, std::string src){
     if(curSection==""){
-         //handle error
+         throw AssemblerException("line"+std::to_string(line)+": Section not defined!");
          return;
     }
     initInstr0(opcode);//1. B
@@ -224,7 +225,7 @@ void Assembler::initInstr2REGREG(int opcode, std::string dst, std::string src){
 
 void Assembler::initInstr2REGOP(int opcode,std::string reg,tokens::Operand op){
     if(curSection==""){
-         //handle error
+         throw AssemblerException("line"+std::to_string(line)+": Section not defined!");
          return;
     }
     initInstr0(opcode);//1. B

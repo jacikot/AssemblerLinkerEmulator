@@ -1,4 +1,5 @@
 # include "../h/driver.h"
+# include "../h/exceptions.h"
 # include <iostream> 
 # include <regex>
 # include <string> 
@@ -27,11 +28,18 @@ int main (int argc, char *argv[])
     drv.outfile=sm[1];
     drv.outfile+=".o";
   }
-  if (drv.parse (drv.file)) return -1;
-  res=drv.assembler.secondPass();
-  if(res<0)return res;
-  res=drv.assembler.output(drv.outfile);
-  //print to file
-  return res;
+  try{
+    if (drv.parse (drv.file)) return -1;
+    res=drv.assembler.secondPass();
+    if(res<0)return res;
+    res=drv.assembler.output(drv.outfile);
+    return res;
+  }
+  catch(AssemblerException exc){
+    std::cerr<<exc<<std::endl;
+    
+  }
+  exit(-1);
+  
 }
 

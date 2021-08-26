@@ -1,4 +1,5 @@
 # include "../h/inputreader.h"
+# include "../h/exceptions.h"
 # include <sstream>
 # include <regex>
 
@@ -26,7 +27,7 @@ std::map<int,std::vector<char>> InputReader::read(){
         std::regex reg("^([0-9a-fA-F]*):$");
         std::smatch sm;
         if(!std::regex_match(data,sm, reg)){
-            //exception 
+            throw EmulatorException("Error in parsing input file!");
             return map;
         }
         int addr=stoi(sm[0],nullptr,16);

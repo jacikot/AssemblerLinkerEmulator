@@ -3,6 +3,7 @@
 # include "../h/cpu.h"
 
 # include <chrono>
+# include <iostream>
 
 void Timer::init(Memory*mem,CPU*proc){
     memory=mem;

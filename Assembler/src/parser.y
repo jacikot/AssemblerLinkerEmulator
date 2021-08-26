@@ -87,12 +87,13 @@ code:
 lines:   
     %empty {}
 |   lines line {
+        drv.assembler.line++;
         drv.assembler.addLine($2);
     }
 |   lines COMMENT {}
 ;
 
-//!!!! labela na kraju svega?
+
 line:
     %empty {
         $$=tokens::Line();

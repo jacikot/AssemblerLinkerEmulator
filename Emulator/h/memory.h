@@ -2,7 +2,7 @@
 # define MEMORY
 
 # define CAPACITY 0x10000
-
+# define RESERVED(x) (x>=0xFE00) && (x<0xFF12)
 
 # include <string>
 # include "memory.h"

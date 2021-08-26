@@ -1,5 +1,6 @@
 # include "../h/linker.h"
 # include "../h/inputreader.h"
+# include "../h/exceptions.h"
 
 # include <vector>
 # include <map>
@@ -94,13 +95,13 @@ header* Linker::getHeader(){
 
 
 int Linker::link(){
-    if(!hex && !linkable)return -1;
+    if(!hex && !linkable || hex && linkable)return -1;
     readFiles();
-    if(checkUndefined()){
-        return -1; //undefined symbols exist
-    }
-    if(!resolveSectionOffsets()) return -1;
+    checkUndefined();
+    resolveSectionOffsets();
     resolveSymbolValues();
     resolveRelocs();
-    generateOutput();
+    if(generateOutput()<0){
+        throw LinkerException("Exception in output generation!");
+    }
 }
