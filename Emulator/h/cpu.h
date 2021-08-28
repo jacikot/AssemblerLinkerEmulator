@@ -81,6 +81,8 @@ class CPU{
 
         int interruptExist();
 
+        void maskInterrupts();
+
 
     private:
         short regs[9];

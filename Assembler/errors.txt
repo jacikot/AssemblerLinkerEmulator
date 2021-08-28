@@ -1,0 +1,99 @@
+In file included from src/../h/assembler.h:9,
+                 from src/assembler.cpp:1:
+src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+In file included from src/../h/assembler.h:9,
+                 from src/../h/driver.h:8,
+                 from src/driver.cpp:1:
+src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+src/exceptions.cpp: In function ‘std::ostream& operator<<(std::ostream&, const AssemblerException&)’:
+src/exceptions.cpp:6:1: warning: no return statement in function returning non-void [-Wreturn-type]
+    6 | }
+      | ^
+In file included from src/../h/assembler.h:9,
+                 from src/../h/driver.h:8,
+                 from src/mainAssembler.cpp:1:
+src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+src/mainAssembler.cpp: In function ‘int main(int, char**)’:
+src/mainAssembler.cpp:27:10: warning: unused variable ‘f’ [-Wunused-variable]
+   27 |     bool f=std::regex_match(drv.file,sm,reg);
+      |          ^
+src/mainAssembler.cpp:38:28: warning: catching polymorphic type ‘class AssemblerException’ by value [-Wcatch-value=]
+   38 |   catch(AssemblerException exc){
+      |                            ^~~
+In file included from src/../h/assembler.h:9,
+                 from src/outputgenerator.cpp:2:
+src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+In file included from src/../h/assembler.h:9,
+                 from src/tokens.cpp:2:
+src/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+src/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+src/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+src/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+In file included from build/../h/assembler.h:9,
+                 from build/../h/driver.h:8,
+                 from ../src/parser.y:20:
+build/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+build/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+build/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+build/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~
+In file included from build/../h/assembler.h:9,
+                 from build/../h/driver.h:8,
+                 from ../src/scanner.l:7:
+build/../h/relocationtable.h: In constructor ‘RelocationRecord::RelocationRecord(int, RelocationType, std::string, std::string)’:
+build/../h/relocationtable.h:26:21: warning: ‘RelocationRecord::name’ will be initialized after [-Wreorder]
+   26 |         std::string name;
+      |                     ^~~~
+build/../h/relocationtable.h:17:21: warning:   ‘std::string RelocationRecord::section’ [-Wreorder]
+   17 |         std::string section;
+      |                     ^~~~~~~
+build/../h/relocationtable.h:14:9: warning:   when initialized here [-Wreorder]
+   14 |         RelocationRecord(int o,RelocationType t,std::string n, std::string s):offset(o),type(t),name(n), section(s){}
+      |         ^~~~~~~~~~~~~~~~

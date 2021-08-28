@@ -145,8 +145,12 @@ void CPU::notifyInterrupt(int num){
     interrupts[num]=true;
 }
 
+void CPU::maskInterrupts(){
+    psw&=~imask;
+}
+
 int CPU::interruptExist(){
-    if((psw&imask))return -1;
+    if((psw&imask)&&!interrupts[Interrupts::ERRORIVT])return -1;
     for(int i=0;i<8;i++){
         switch(i){
             case Interrupts::TIMER:

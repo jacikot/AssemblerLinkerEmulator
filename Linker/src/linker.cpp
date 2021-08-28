@@ -72,6 +72,10 @@ void Linker::resolveRelocs(){
     }
     else{
         for(RelocationRecord&r:relocations){
+            if(sectionMap.exist(r.name)){ //if it is section (local symbol)
+                short*addr=(short*)sectionMap.getContent(r.section,r.file,r.offset);
+                *addr+=sectionMap.getValue(r.name,r.file);
+            }
             r.offset+=sectionMap.getValue(r.section,r.file);
         }
     }

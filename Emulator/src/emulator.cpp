@@ -141,8 +141,9 @@ int Emulator::emulate(){
                 break;
             case InstructionType::INT:
                 reg=memory.read1(cpu.getPC());
-                //push(pc)?
+                push(pc); //proveri
                 push(pswr);
+                cpu.maskInterrupts();
                 operand=memory.read2((cpu.getReg(REGD(reg))%8)*2);
                 cpu.setReg(pc,operand);
                 break;
@@ -249,10 +250,16 @@ int Emulator::emulate(){
 void Emulator::interrupts(){
     int interrupt=cpu.interruptExist();
     if(interrupt==-1)return;
-    push(pc);
-    push(pswr);
-    short addr=memory.read2(interrupt*2);
-    cpu.setReg(pc,addr);
+    if(interrupt!=0){
+        push(pc);
+        push(pswr);
+        cpu.maskInterrupts();
+        short addr=memory.read2(interrupt*2);
+        cpu.setReg(pc,addr);
+    }
+    else{
+        reset();
+    }
 }
 
 void Emulator::pop(int regD){
