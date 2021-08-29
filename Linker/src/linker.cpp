@@ -65,7 +65,7 @@ void Linker::resolveRelocs(){
                 *addr+=value; //testiraj ovo
             }
             else{
-                *addr+=value-r.offset;
+                *addr+=value-r.offset-sectionMap.getValue(r.section,r.file);
             }
             short x=*addr;
         }

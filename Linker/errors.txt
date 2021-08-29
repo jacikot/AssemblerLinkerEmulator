@@ -15,11 +15,11 @@ src/linker.cpp:70:19: warning: unused variable ‘x’ [-Wunused-variable]
    70 |             short x=*addr;
       |                   ^
 src/linker.cpp: In member function ‘int Linker::link()’:
-src/linker.cpp:98:13: warning: suggest parentheses around ‘&&’ within ‘||’ [-Wparentheses]
-   98 |     if(!hex && !linkable || hex && linkable)return -1;
+src/linker.cpp:102:13: warning: suggest parentheses around ‘&&’ within ‘||’ [-Wparentheses]
+  102 |     if(!hex && !linkable || hex && linkable)return -1;
       |        ~~~~~^~~~~~~~~~~~
-src/linker.cpp:107:1: warning: control reaches end of non-void function [-Wreturn-type]
-  107 | }
+src/linker.cpp:111:1: warning: control reaches end of non-void function [-Wreturn-type]
+  111 | }
       | ^
 src/mainLinker.cpp: In function ‘int main(int, char**)’:
 src/mainLinker.cpp:46:25: warning: catching polymorphic type ‘class LinkerException’ by value [-Wcatch-value=]

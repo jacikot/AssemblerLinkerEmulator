@@ -1,4 +1,6 @@
 # include "../h/cpu.h"
+# include <iostream>
+using namespace std;
 
 CPU::CPU(){
     regs[pc]=Interrupts::ENTRY;
@@ -62,10 +64,12 @@ void CPU::div(int dst,int src){
 }
 
 void CPU::cmp(int dst,int src){
-    short j = -regs[1];
+    short j = -regs[src];
     unsigned tmp=(unsigned short)regs[dst]+(unsigned short)j;
     //z
-    if(tmp==0) psw|=zmask;
+    if((tmp&0xFFFF)==0) {
+        psw|=zmask;
+    }
     else psw&=~zmask;
     //o
     if( 
@@ -146,7 +150,7 @@ void CPU::notifyInterrupt(int num){
 }
 
 void CPU::maskInterrupts(){
-    psw&=~imask;
+    psw|=imask;
 }
 
 int CPU::interruptExist(){

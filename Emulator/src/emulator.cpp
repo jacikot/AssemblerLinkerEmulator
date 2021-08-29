@@ -6,6 +6,7 @@
 # include <vector>
 # include <map>
 
+
 void Emulator::storeToOperand(int addr, int regs){
     short val=cpu.getReg(REGD(regs));
     unsigned short a;
@@ -35,7 +36,7 @@ void Emulator::storeToOperand(int addr, int regs){
             memory.store2(a,val);
             return;
         case Addressing::REGINDPOM: 
-            a=cpu.getReg(REGS(regs))+ memory.read2(cpu.getPC2());
+            a=memory.read2(cpu.getPC2())+cpu.getReg(REGS(regs));
             switch(ADDRH(addr)){
                 case 0b0000: break;
                 case 0b0001:
@@ -85,7 +86,7 @@ int Emulator::getOperand(int addr, int regs){
             }
             return memory.read2(a);
         case Addressing::REGINDPOM: 
-            a=cpu.getReg(REGS(regs))+ memory.read2(cpu.getPC2());
+            a=memory.read2(cpu.getPC2())+cpu.getReg(REGS(regs));
             switch(ADDRH(addr)){
                 case 0b0000: break;
                 case 0b0001:
@@ -101,7 +102,7 @@ int Emulator::getOperand(int addr, int regs){
             }
             return memory.read2(a);
         case Addressing::REGDIRPOM: 
-            return cpu.getReg(REGS(regs))+ memory.read2(cpu.getPC2());
+            return memory.read2(cpu.getPC2()) +cpu.getReg(REGS(regs));
         default:
             cpu.notifyInterrupt(Interrupts::ERRORIVT);
             return -1;
@@ -114,6 +115,7 @@ void Emulator::reset(){
     cpu.setReg(pc,startAddr);
     cpu.setReg(sp,SP_START);
     cpu.setReg(pswr,0);
+    
     terminal.init(&memory,&cpu);
     timer.init(&memory,&cpu);
 }

@@ -1,14 +1,14 @@
 src/cpu.cpp: In member function ‘void CPU::jgt(int)’:
-src/cpu.cpp:39:26: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
-   39 |     if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
+src/cpu.cpp:41:26: warning: suggest parentheses around arithmetic in operand of ‘|’ [-Wparentheses]
+   41 |     if(!(((psw&nmask)>>2)^(psw&omask)|psw&zmask)) regs[pc]=addr;
       |          ~~~~~~~~~~~~~~~~^~~~~~~~~~~~
 src/emulator.cpp: In member function ‘int Emulator::emulate()’:
-src/emulator.cpp:248:1: warning: no return statement in function returning non-void [-Wreturn-type]
-  248 | }
+src/emulator.cpp:250:1: warning: no return statement in function returning non-void [-Wreturn-type]
+  250 | }
       | ^
 src/emulator.cpp: In member function ‘int Emulator::init()’:
-src/emulator.cpp:125:1: warning: control reaches end of non-void function [-Wreturn-type]
-  125 | }
+src/emulator.cpp:127:1: warning: control reaches end of non-void function [-Wreturn-type]
+  127 | }
       | ^
 src/exceptions.cpp: In function ‘std::ostream& operator<<(std::ostream&, const EmulatorException&)’:
 src/exceptions.cpp:6:1: warning: no return statement in function returning non-void [-Wreturn-type]
